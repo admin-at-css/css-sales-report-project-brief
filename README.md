@@ -46,7 +46,7 @@ PT Cepat Service Station adalah distributor cat industrial/decorative. Sales rep
 
 ## 📚 Apa yang Ada di Repo Ini?
 
-### 📖 Wajib Baca (Untuk Menghitung Budget)
+### 📖 Wajib Baca (Untuk Memahami Scope & Kompleksitas)
 
 1. **[MVP_SCOPE.md](./MVP_SCOPE.md)** - MVP deliverables, 79 story points breakdown
 2. **[USER_STORIES.md](./USER_STORIES.md)** - 19 user stories lengkap dengan acceptance criteria
@@ -54,37 +54,41 @@ PT Cepat Service Station adalah distributor cat industrial/decorative. Sales rep
 4. **[SYNC_STRATEGY.md](./SYNC_STRATEGY.md)** - Offline-first sync logic, conflict resolution
 5. **[TECHNICAL_CHALLENGES.md](./TECHNICAL_CHALLENGES.md)** - Kenapa project ini kompleks
 
-### 🔧 Technical Reference
+### 📚 Bacaan Opsional (Deep Dive)
 
-6. **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Clean Architecture, BLoC pattern, tech stack
-7. **[TECHNICAL_SPEC.md](./TECHNICAL_SPEC.md)** - Edge cases, non-functional requirements
-8. **[HOW_TO_PROPOSE.md](./HOW_TO_PROPOSE.md)** - Guide untuk calculate budget & timeline
-
-### 🔮 Bonus Context (Optional)
-
-9. **[PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md)** - Business context lengkap
-10. **[FUTURE_PHASES.md](./FUTURE_PHASES.md)** - Phase 2 & 3 scope (long-term potential)
+- **[PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md)** - Business context lengkap
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Clean Architecture, BLoC pattern, tech stack
+- **[TECHNICAL_SPEC.md](./TECHNICAL_SPEC.md)** - Edge cases, non-functional requirements
+- **[FUTURE_PHASES.md](./FUTURE_PHASES.md)** - Phase 2 & 3 scope (long-term potential)
 
 ---
 
 ## 🚀 Cara Menggunakan Repo Ini
 
-### Step 1: Read Wajib (2-3 jam)
-1. Start with **MVP_SCOPE.md** - Understand high-level deliverables
-2. Read **USER_STORIES.md** - Detail requirements per feature
-3. Study **DATABASE_SCHEMA.md** - Database complexity (31 RLS policies!)
-4. Review **SYNC_STRATEGY.md** - Sync logic yang cukup kompleks
-5. Check **TECHNICAL_CHALLENGES.md** - Confirm you can handle this
+**Ikuti alur dokumen ini secara berurutan (3-5 jam total):**
 
-### Step 2: Calculate Effort (1-2 jam)
-1. Read **HOW_TO_PROPOSE.md** - Guide untuk breakdown effort
-2. Estimate effort per Epic (use story points as reference)
-3. Calculate your hourly/daily rate × total effort = budget
-4. Add buffer untuk unknowns (15-20%)
-5. Prepare realistic timeline (best/realistic/worst case)
+Setiap dokumen memiliki navigasi di bagian bawah untuk memandu Anda ke dokumen berikutnya.
 
-### Step 3: Fill Google Form
-📋 **Application Form:** https://forms.gle/ZjHRjnxggkZ8a6Qb8
+### ✅ Mulai dari Sini:
+
+**➡️ [Mulai: MVP Scope →](./MVP_SCOPE.md)**
+
+**Urutan Bacaan (Wajib):**
+1. [MVP_SCOPE.md](./MVP_SCOPE.md) - High-level deliverables
+2. [USER_STORIES.md](./USER_STORIES.md) - Detail requirements per feature
+3. [DATABASE_SCHEMA.md](./DATABASE_SCHEMA.md) - Database complexity
+4. [SYNC_STRATEGY.md](./SYNC_STRATEGY.md) - Offline-first sync logic
+5. [TECHNICAL_CHALLENGES.md](./TECHNICAL_CHALLENGES.md) - Why this is complex
+6. [Google Form](https://forms.gle/ZjHRjnxggkZ8a6Qb8) - Submit proposal ✅
+
+**Bacaan Opsional** tersedia di akhir alur dokumen (setelah TECHNICAL_CHALLENGES.md).
+
+---
+
+### 📋 Setelah Selesai Membaca
+
+**Isi Google Form Application:**
+- 📋 https://forms.gle/ZjHRjnxggkZ8a6Qb8
 
 Yang perlu Anda submit:
 - Portfolio (Play Store links)
@@ -94,7 +98,7 @@ Yang perlu Anda submit:
 - Timeline estimate
 - Technical questions
 
-### Step 4: Wait for Response
+**Wait for Response:**
 Kami akan review semua aplikasi setelah deadline dan contact top 3-5 kandidat via email untuk technical interview.
 
 ---
@@ -131,10 +135,9 @@ Jika MVP sukses, ada **Phase 2** (enhanced features) dan **Phase 3** (scale to 1
 
 ## 📞 Next Steps
 
-1. ✅ **Review semua dokumentasi di repo ini** (3-5 jam total)
-2. ✅ **Calculate budget & timeline** realistis
-3. ✅ **Fill Google Form** dengan honest proposal
-4. ⏳ **Wait for email** (top 3-5 kandidat akan di-contact untuk interview)
+1. ✅ **Review semua dokumentasi di repo ini** (3-5 jam total) - Ikuti alur dari MVP_SCOPE.md
+2. ✅ **Fill Google Form** dengan honest proposal
+3. ⏳ **Wait for email** (top 3-5 kandidat akan di-contact untuk interview)
 
 **Questions?** Silakan include di Google Form atau message via FastWork.
 

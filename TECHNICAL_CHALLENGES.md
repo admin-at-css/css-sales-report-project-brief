@@ -1,5 +1,9 @@
 # Technical Challenges - Why This Project is Complex
 
+← [Sebelumnya: Sync Strategy](./SYNC_STRATEGY.md)
+
+---
+
 **Purpose of this document:** Explain why this is NOT a basic CRUD app and help you estimate effort accurately.
 
 ---
@@ -378,14 +382,42 @@ Presentation → Data → Domain
 
 ---
 
-## 🔗 Next Steps
+## 📍 Langkah Selanjutnya
 
-After understanding technical challenges:
-1. ✅ Read **DATABASE_SCHEMA.md** - See the 31 RLS policies
-2. ✅ Read **SYNC_STRATEGY.md** - Understand offline-first sync logic
-3. ✅ Read **USER_STORIES.md** - Full requirements with edge cases
-4. ✅ Read **HOW_TO_PROPOSE.md** - Guide untuk calculate realistic budget
-5. ✅ Fill Google Form with honest, detailed proposal
+**Sudah memahami kompleksitas project ini?**
+
+**Siap untuk apply?**
+- 📋 [Isi Google Form Application →](https://forms.gle/ZjHRjnxggkZ8a6Qb8)
+
+**Atau kembali ke:**
+- ← [Sync Strategy](./SYNC_STRATEGY.md)
+- 🏠 [README](./README.md)
+
+---
+
+## 📚 Bacaan Opsional (Deep Dive)
+
+Jika ingin memahami lebih dalam sebelum apply:
+
+- **[PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md)** - Business context lengkap
+  - Kenapa app ini dibuat
+  - Pain points dari sistem WhatsApp saat ini
+  - Users & roles detail
+
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Clean Architecture + BLoC implementation details
+  - Layer structure (Domain/Data/Presentation)
+  - BLoC pattern untuk state management
+  - Dependency injection strategy
+
+- **[TECHNICAL_SPEC.md](./TECHNICAL_SPEC.md)** - Edge cases & non-functional requirements
+  - Performance requirements
+  - Error handling strategies
+  - Accessibility guidelines
+
+- **[FUTURE_PHASES.md](./FUTURE_PHASES.md)** - Phase 2 & 3 scope (long-term potential)
+  - Enhanced features yang akan ditambahkan
+  - Scale plan ke 10-50 users
+  - Long-term partnership opportunities
 
 ---
 

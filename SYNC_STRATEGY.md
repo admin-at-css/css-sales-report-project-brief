@@ -1,6 +1,10 @@
 # Synchronization Strategy
 ## CSS Sales Report - Offline-First Sync Logic
 
+← [Sebelumnya: Database Schema](./DATABASE_SCHEMA.md)
+
+---
+
 **Tujuan:** Panduan implementasi sync yang komprehensif untuk production deployment
 **Terakhir Diperbarui:** Oktober 2025
 **Versi:** 3.0 (Production Ready)
@@ -924,7 +928,6 @@ GROUP BY status;
 ---
 
 **Terakhir Diperbarui:** Oktober 2025 (v3.0 - Production Ready)
-**Next Review:** Setelah MVP pilot deployment
 
 ---
 
@@ -935,3 +938,14 @@ GROUP BY status;
 - Edge Cases Document (line 363-388: Token expiry)
 - Drift_Schema.md (SyncTransactions table)
 - Technical_Spec.md (Non-functional requirements)
+
+---
+
+## 📍 Navigasi
+
+**Selesai membaca Sync Strategy?**
+- ✅ [Lanjut ke: Technical Challenges →](./TECHNICAL_CHALLENGES.md)
+
+**Atau kembali ke:**
+- ← [Database Schema](./DATABASE_SCHEMA.md)
+- 🏠 [README](./README.md)

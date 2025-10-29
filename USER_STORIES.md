@@ -1,6 +1,10 @@
 # Spesifikasi Fungsional
 ## CSS Sales Report - User Stories & Requirements
 
+← [Sebelumnya: MVP Scope](./MVP_SCOPE.md)
+
+---
+
 **Versi:** 3.0 (Production Ready)
 **Terakhir Diperbarui:** Oktober 2025
 **Total Story Points:** 106
@@ -970,4 +974,14 @@ Setiap user story dianggap SELESAI ketika:
 
 **Document Status:** ✅ Complete - Ready untuk development
 **Terakhir Diperbarui:** Oktober 2025
-**Next Review:** Setelah MVP completion
+
+---
+
+## 📍 Navigasi
+
+**Selesai membaca User Stories?**
+- ✅ [Lanjut ke: Database Schema →](./DATABASE_SCHEMA.md)
+
+**Atau kembali ke:**
+- ← [MVP Scope](./MVP_SCOPE.md)
+- 🏠 [README](./README.md)

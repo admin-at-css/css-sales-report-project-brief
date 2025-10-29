@@ -1,6 +1,10 @@
 # Dokumentasi Database Schema
 ## CSS Sales Report App - Supabase & Drift
 
+← [Sebelumnya: User Stories](./USER_STORIES.md)
+
+---
+
 **Project:** CSS Sales Report MVP
 **Database:** Supabase (PostgreSQL) + Drift (SQLite untuk offline)
 **Tanggal:** Oktober 2025
@@ -1264,7 +1268,6 @@ Sebelum deployment, verify:
 ---
 
 **Terakhir Diperbarui:** Oktober 2025 (v3.0 - Production Ready)
-**Next Review:** Setelah MVP deployment dan performance profiling
 
 ---
 
@@ -1275,3 +1278,14 @@ Sebelum deployment, verify:
 | 1.0 | Initial | Basic schema |
 | 2.0 | Oct 2025 | Ditambahkan sync state fields |
 | 3.0 | Oct 2025 | **Production Ready**: Currency sebagai INTEGER, sync transactions table, enhanced attachment tracking, pagination support |
+
+---
+
+## 📍 Navigasi
+
+**Selesai membaca Database Schema?**
+- ✅ [Lanjut ke: Sync Strategy →](./SYNC_STRATEGY.md)
+
+**Atau kembali ke:**
+- ← [User Stories](./USER_STORIES.md)
+- 🏠 [README](./README.md)
