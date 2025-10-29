@@ -142,7 +142,7 @@ Jika MVP sukses, ada **Phase 2** (enhanced features) dan **Phase 3** (scale to 1
 
 ## 🔗 Links
 
-- **Job Posting:** [FastWork.id Link]
+- **Job Posting:** https://jobboard.fastwork.id/jobs/c4fd9ba2-9203-45bf-b275-764943c3c18c
 - **Application Form:** https://forms.gle/ZjHRjnxggkZ8a6Qb8
 - **Application Deadline:** Minggu, [DATE] pukul 23:59 WIB
 
