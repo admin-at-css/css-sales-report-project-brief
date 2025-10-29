@@ -1,18 +1,18 @@
-# Technical Challenges - Why This Project is Complex
+# Technical Challenges - Mengapa Project Ini Kompleks
 
 ← [Sebelumnya: Sync Strategy](./SYNC_STRATEGY.md)
 
 ---
 
-**Purpose of this document:** Explain why this is NOT a basic CRUD app and help you estimate effort accurately.
+**Tujuan dokumen ini:** Menjelaskan mengapa ini BUKAN basic CRUD app dan membantu Anda estimate effort secara akurat.
 
 ---
 
-## ⚠️ TL;DR - This is NOT a Basic CRUD App
+## ⚠️ TL;DR - Ini BUKAN Basic CRUD App
 
-If you're thinking "it's just forms + database", **think again**.
+Jika Anda berpikir "ini hanya forms + database", **pikirkan lagi**.
 
-**Key Complexity Factors:**
+**Faktor Kompleksitas Utama:**
 1. 🔴 **Offline-first architecture** (not just "add SQLite")
 2. 🔴 **31 Row-Level Security policies** (strict data isolation)
 3. 🔴 **Background sync with conflict resolution** (not trivial)
@@ -24,13 +24,13 @@ If you're thinking "it's just forms + database", **think again**.
 
 ## 🧩 Challenge #1: Offline-First Architecture
 
-### What It Means
+### Apa Artinya
 
 **NOT** "just add SQLite as cache"
 
 **YES** "complete local-first system with sync strategy"
 
-### Technical Requirements
+### Kebutuhan Teknis
 
 **Local Database (Drift/SQLite):**
 - ✅ All 8 tables replicated locally
@@ -51,7 +51,7 @@ If you're thinking "it's just forms + database", **think again**.
 - ✅ Timestamp comparison (`updated_at` field)
 - ✅ Handle edge cases (edit while syncing, etc)
 
-### Why It's Hard
+### Mengapa Ini Sulit
 
 1. **State Management Complexity**
    - Need to track: local state, sync status, network status
@@ -68,7 +68,7 @@ If you're thinking "it's just forms + database", **think again**.
    - Need to test all edge cases
    - Integration tests are critical
 
-### Estimated Effort
+### Estimasi Effort
 
 - **Basic CRUD with SQLite:** 2-3 days
 - **Proper offline-first with sync:** 2-3 weeks
@@ -79,7 +79,7 @@ If you're thinking "it's just forms + database", **think again**.
 
 ## 🔐 Challenge #2: Row-Level Security (RLS) Policies
 
-### What It Means
+### Apa Artinya
 
 **31 RLS policies** di Supabase untuk ensure strict data isolation.
 
@@ -89,7 +89,7 @@ If you're thinking "it's just forms + database", **think again**.
 - ✅ Users can only edit their own records
 - ✅ RLS policies must be tested **before** development
 
-### Technical Requirements
+### Kebutuhan Teknis
 
 **Supabase RLS Policies (8 tables × ~4 policies each):**
 ```sql
@@ -124,7 +124,7 @@ CREATE POLICY "Users can update own reports"
 - ✅ Test all CRUD operations per role
 - ✅ Test edge cases (shared contacts, etc)
 
-### Why It's Hard
+### Mengapa Ini Sulit
 
 1. **SQL Complexity**
    - RLS policies use PostgreSQL functions
@@ -141,7 +141,7 @@ CREATE POLICY "Users can update own reports"
    - Client-side filtering required
    - Potential for data leakage if implemented wrong
 
-### Estimated Effort
+### Estimasi Effort
 
 - **Basic CRUD (no RLS):** 1 week
 - **With RLS policies + testing:** 2-3 weeks
@@ -152,13 +152,13 @@ CREATE POLICY "Users can update own reports"
 
 ## 📸 Challenge #3: Photo Upload Management
 
-### What It Means
+### Apa Artinya
 
 **NOT** just "upload file to storage"
 
 **YES** "robust multi-photo upload with individual status tracking"
 
-### Technical Requirements
+### Kebutuhan Teknis
 
 **Per-Photo Status Tracking:**
 - ✅ Each photo has status: `pending`, `uploading`, `success`, `failed`
@@ -201,7 +201,7 @@ Future<void> uploadReportPhotos(String reportId, List<Photo> photos) async {
 - ✅ Gracefully handle network errors
 - ✅ Work offline (queue for later)
 
-### Why It's Hard
+### Mengapa Ini Sulit
 
 1. **Error Handling Complexity**
    - Network can fail mid-upload
@@ -219,7 +219,7 @@ Future<void> uploadReportPhotos(String reportId, List<Photo> photos) async {
    - Handle large files (compression required)
    - Supabase storage limits
 
-### Estimated Effort
+### Estimasi Effort
 
 - **Basic photo upload:** 2-3 days
 - **Robust with status tracking + retry:** 1-2 weeks
@@ -230,13 +230,13 @@ Future<void> uploadReportPhotos(String reportId, List<Photo> photos) async {
 
 ## 🏗️ Challenge #4: Clean Architecture + BLoC
 
-### What It Means
+### Apa Artinya
 
 **NOT** "put all code in one file"
 
 **YES** "strict 3-layer separation with dependency injection"
 
-### Required Structure
+### Struktur yang Dibutuhkan
 
 ```
 lib/
@@ -265,7 +265,7 @@ Presentation → Data → Domain
 - Data can import Domain only
 - Domain imports NOTHING (pure Dart)
 
-### Why It's Hard
+### Mengapa Ini Sulit
 
 1. **Learning Curve**
    - If you've never done Clean Architecture, steep learning curve
@@ -280,7 +280,7 @@ Presentation → Data → Domain
    - Mocking dependencies required
    - Test coverage >60% overall, >80% business logic
 
-### Estimated Effort
+### Estimasi Effort
 
 - **Basic MVC structure:** 1 week for all features
 - **Clean Architecture + BLoC:** 3-4 weeks for all features
@@ -291,7 +291,7 @@ Presentation → Data → Domain
 
 ## ✅ Challenge #5: Code Quality Standards
 
-### Requirements
+### Kebutuhan
 
 **Flutter Analyze:**
 - ✅ `flutter analyze` must be 100% clean (0 errors, 0 warnings)
@@ -312,7 +312,7 @@ Presentation → Data → Domain
 - ✅ Dartdoc comments on public APIs
 - ✅ No `TODO` comments in committed code
 
-### Why It's Hard
+### Mengapa Ini Sulit
 
 1. **Time Investment**
    - Writing tests takes time (sometimes 2x implementation time)
@@ -322,7 +322,7 @@ Presentation → Data → Domain
    - Need to know how to write good tests
    - Need to understand mocking, dependency injection
 
-### Estimated Effort
+### Estimasi Effort
 
 - **No tests, basic code:** 10 weeks
 - **With tests + clean code:** 12-14 weeks
@@ -331,7 +331,7 @@ Presentation → Data → Domain
 
 ---
 
-## 📊 Complexity Comparison
+## 📊 Perbandingan Kompleksitas
 
 | Feature | Basic CRUD App | This Project | Multiplier |
 |---------|---------------|--------------|------------|
@@ -346,9 +346,9 @@ Presentation → Data → Domain
 
 ---
 
-## 💡 What This Means for Your Estimate
+## 💡 Apa Artinya untuk Estimasi Anda
 
-### If You've Only Built Basic CRUD Apps
+### Jika Anda Hanya Pernah Build Basic CRUD Apps
 
 **Your initial estimate is probably 3-5x too low.**
 
@@ -358,7 +358,7 @@ Presentation → Data → Domain
 
 **Advice:** Be honest about your experience level. If you've never done offline-first, say so and price accordingly (include learning time).
 
-### If You've Built Offline-First Apps Before
+### Jika Anda Sudah Pernah Build Offline-First Apps
 
 **You're in a good position, but don't underestimate:**
 - 31 RLS policies need careful testing
@@ -367,14 +367,14 @@ Presentation → Data → Domain
 
 **Advice:** Reference your past projects. Show you understand the complexity.
 
-### Red Flags in Proposals
+### Red Flags dalam Proposal
 
 - ❌ "4 juta cukup untuk semua, 3 minggu selesai"
 - ❌ No mention of offline-first complexity
 - ❌ No mention of RLS testing strategy
 - ❌ Generic estimate without per-Epic breakdown
 
-### Good Proposals
+### Proposal yang Baik
 
 - ✅ "4 juta cukup untuk Epic 1-3 (Authentication + Companies + Contacts), estimated 3-4 weeks"
 - ✅ "Full MVP (79 points) realistic budget adalah Rp 16 juta, 11 weeks, breakdown terlampir"
