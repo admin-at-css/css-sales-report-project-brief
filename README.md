@@ -84,7 +84,7 @@ PT Cepat Service Station adalah distributor cat industrial/decorative. Sales rep
 5. Prepare realistic timeline (best/realistic/worst case)
 
 ### Step 3: Fill Google Form
-📋 **Application Form:** [GOOGLE_FORM_LINK_AKAN_DI-INSERT]
+📋 **Application Form:** https://forms.gle/ZjHRjnxggkZ8a6Qb8
 
 Yang perlu Anda submit:
 - Portfolio (Play Store links)
@@ -117,13 +117,11 @@ Jika Anda hanya familiar dengan basic CRUD apps, project ini mungkin terlalu kom
 
 **Budget yang kami posting:** Rp 4.000.000
 
-**Realistic estimate untuk full MVP:** Rp 15-20 juta (10-12 minggu)
+Ini adalah budget yang kami miliki untuk project ini. Kami understand bahwa ini adalah project kompleks dengan 79 story points. Dalam proposal Anda:
+- **Opsi A:** Dengan Rp 4 juta, Epic mana yang bisa Anda deliver? (kami accept partial delivery)
+- **Opsi B:** Berapa budget yang Anda butuhkan untuk full MVP? (kami will consider jika proposal Anda convincing)
 
-Kami understand bahwa Rp 4 juta tidak cukup untuk full MVP. Dalam proposal Anda:
-- **Opsi A:** Dengan Rp 4 juta, Epic mana yang bisa Anda deliver? (kami accept partial)
-- **Opsi B:** Berapa budget yang Anda butuhkan untuk full MVP? (kami will consider jika convincing)
-
-**Honesty > Overpromising.** Kami prefer "4 juta cukup untuk Epic 1-2" daripada "4 juta bisa semua" lalu gagal deliver.
+**Honesty > Overpromising.** Kami prefer proposal yang realistis daripada overpromise yang tidak bisa di-deliver.
 
 ### Long-Term Opportunity
 
@@ -145,7 +143,7 @@ Jika MVP sukses, ada **Phase 2** (enhanced features) dan **Phase 3** (scale to 1
 ## 🔗 Links
 
 - **Job Posting:** [FastWork.id Link]
-- **Application Form:** [GOOGLE_FORM_LINK_AKAN_DI-INSERT]
+- **Application Form:** https://forms.gle/ZjHRjnxggkZ8a6Qb8
 - **Application Deadline:** Minggu, [DATE] pukul 23:59 WIB
 
 ---
