@@ -13,36 +13,36 @@
 
 ---
 
-## 📋 Ringkasan Eksekutif
+## 📋 Executive Summary
 
-### Tujuan MVP
-Deliver working offline-first mobile app yang memungkinkan **2 sales reps** membuat structured visit reports lebih baik dari WhatsApp, dengan **1 manager** memiliki read-only visibility ke semua team activities.
+### MVP Goal
+Memberikan working offline-first mobile app yang memungkinkan **2 sales reps** membuat structured visit reports lebih baik dari WhatsApp, dengan **1 manager** memiliki read-only visibility ke semua team activities.
 
-### Kriteria Sukses
-- ✅ 2 sales reps menggunakan app daily selama 30 hari berturut-turut
-- ✅ Zero data loss incidents
+### Success Criteria
+- ✅ 2 sales reps menggunakan app setiap hari selama 30 hari berturut-turut
+- ✅ Tidak ada data loss incidents
 - ✅ Sync success rate >95%
-- ✅ Sales reps prefer app dibanding WhatsApp (survey >4/5)
-- ✅ Manager dapat view semua reports secara real-time
+- ✅ Sales reps lebih memilih app dibanding WhatsApp (survey >4/5)
+- ✅ Manager dapat melihat semua reports secara real-time
 
-### Yang Termasuk vs Tidak Termasuk
+### What's In vs Out
 
-**✅ TERMASUK di MVP:**
+**✅ IN MVP:**
 - Full offline-first capability
 - Create companies, contacts, projects, reports
-- **Edit companies, contacts, projects** (data quality essential)
+- **Edit companies, contacts, projects** (kualitas data sangat penting)
 - View semua created entities
 - Manager dashboard dengan team reports
-- Draft auto-save (setiap 30s)
+- Draft auto-save (setiap 30 detik)
 - Pagination untuk semua lists
-- Sync transaction log (rollback capability)
+- Sync transaction log (kemampuan rollback)
 - Per-photo sync status tracking
-- Token refresh on expiry
-- Last-Write-Wins conflict resolution (automatic)
+- Token refresh saat expiry
+- Last-Write-Wins conflict resolution (otomatis)
 
-**❌ TIDAK TERMASUK di MVP (Phase 2):**
-- Edit reports (defer ke Phase 2)
-- Delete functionality (all entities)
+**❌ OUT of MVP (Phase 2):**
+- Edit reports (ditunda ke Phase 2)
+- Delete functionality (semua entities)
 - Dashboard statistics/analytics
 - User profile settings
 - Export ke Excel/PDF
@@ -50,21 +50,21 @@ Deliver working offline-first mobile app yang memungkinkan **2 sales reps** memb
 
 ---
 
-## 🎯 Breakdown Scope MVP
+## 🎯 MVP Scope Breakdown
 
 ### EPIC 1: Authentication (5 Story Points)
 
 #### ✅ US-1.1: Login with Email & Password
 **Story Points:** 3
-**Prioritas:** P0 (Critical)
+**Priority:** P0 (Critical)
 
-**Yang Termasuk:**
+**Included:**
 - Email/password login via Supabase Auth
 - Session persistence (flutter_secure_storage)
 - Token refresh on expiry (auto-refresh 1 jam sebelum 7-day expiry)
 - Error handling (network errors, invalid credentials)
 
-**Implementasi Teknis:**
+**Technical Implementation:**
 ```dart
 // lib/features/auth/data/repositories/auth_repository_impl.dart
 Future<User> login(String email, String password) async {
@@ -84,7 +84,7 @@ Future<User> login(String email, String password) async {
 }
 ```
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Valid credentials → Redirect ke home
 - ✅ Invalid credentials → Show error message
 - ✅ Session persists setelah app restart
@@ -94,16 +94,16 @@ Future<User> login(String email, String password) async {
 
 #### ✅ US-1.2: Logout from App
 **Story Points:** 2
-**Prioritas:** P1 (High)
+**Priority:** P1 (High)
 
-**Yang Termasuk:**
+**Included:**
 - Logout button di UI
 - Confirmation dialog
 - Clear session token
 - Keep local database (Drift) intact
 - Works offline
 
-**Alasan Termasuk:** Essential untuk security, memungkinkan sales rep switch accounts jika diperlukan.
+**Why Include:** Essential untuk security, memungkinkan sales rep switch accounts jika diperlukan.
 
 ---
 
@@ -111,20 +111,20 @@ Future<User> login(String email, String password) async {
 
 #### ✅ US-2.1: View List of Companies
 **Story Points:** 3
-**Prioritas:** P0 (Critical)
+**Priority:** P0 (Critical)
 
-**Yang Termasuk:**
+**Included:**
 - List semua companies yang dibuat oleh current user
 - **Pagination: 20 items per page** (P0 requirement)
 - Search by company name
 - Sort by created date (newest first)
 - Pull-to-refresh
 
-**Alasan Pagination adalah P0:**
+**Why Pagination is P0:**
 - Performance requirement untuk prevent UI freeze dengan 100+ companies
 - User stated: "Pagination required untuk list views"
 
-**Implementasi Teknis:**
+**Technical Implementation:**
 ```dart
 // lib/features/companies/data/datasources/company_local_datasource.dart
 Stream<List<Company>> watchCompanies({
@@ -145,7 +145,7 @@ Stream<List<Company>> watchCompanies({
 }
 ```
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Shows first 20 companies
 - ✅ Load more on scroll
 - ✅ Search filters list
@@ -155,16 +155,16 @@ Stream<List<Company>> watchCompanies({
 
 #### ✅ US-2.2: Create New Company
 **Story Points:** 5
-**Prioritas:** P0 (Critical)
+**Priority:** P0 (Critical)
 
-**Yang Termasuk:**
+**Included:**
 - Form fields: Name (required), Address (optional), City (optional)
 - Validation: Name required, max 200 chars
 - Save ke local DB (Drift) immediately
 - Auto-sync ke Supabase ketika online
 - Offline capability
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Create offline → Saved ke SQLite
 - ✅ Go online → Auto-synced ke Supabase
 - ✅ Validation errors ditunjukkan dengan jelas
@@ -173,22 +173,22 @@ Stream<List<Company>> watchCompanies({
 
 #### ✅ US-2.3: Edit Company
 **Story Points:** 2
-**Prioritas:** P1 (High)
+**Priority:** P1 (High)
 
-**Yang Termasuk:**
+**Included:**
 - Edit name, address, city
 - Reuse Create Company form (pre-populated dengan existing data)
 - Update local DB + sync ke Supabase
 - **Last-Write-Wins conflict resolution** (automatic, no UI)
 - Works offline
 
-**Alasan Termasuk di MVP:**
+**Why Include in MVP:**
 - **Data quality critical:** Typos di company names membuat confusion untuk manager
 - **Prevents duplicate records:** Tanpa edit, users membuat "PT ABC Typo" + "PT ABC Correct" = dirty data
 - **User expectation:** Basic CRUD expected (Create + Edit + View)
 - **Low complexity:** Reuse create form, UPDATE query instead of INSERT (1-2 hari kerja)
 
-**Implementasi Teknis:**
+**Technical Implementation:**
 ```dart
 Future<void> updateCompany(Company updated) async {
   // 1. Update local DB
@@ -230,7 +230,7 @@ Future<void> syncCompanyUpdate(Company local) async {
 }
 ```
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Edit company offline → Saved locally
 - ✅ Go online → Syncs ke Supabase
 - ✅ Two users edit same company → Latest timestamp wins (no errors)
@@ -248,15 +248,15 @@ Future<void> syncCompanyUpdate(Company local) async {
 
 #### ✅ US-3.1: View List of Contacts per Company
 **Story Points:** 3
-**Prioritas:** P0 (Critical)
+**Priority:** P0 (Critical)
 
-**Yang Termasuk:**
+**Included:**
 - List contacts untuk selected company
 - **Pagination: 20 items per page**
 - Search by name/position/phone
 - Show primary contact badge
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Lists contacts untuk company
 - ✅ Pagination works dengan 20+ contacts
 - ✅ Search filters list
@@ -265,15 +265,15 @@ Future<void> syncCompanyUpdate(Company local) async {
 
 #### ✅ US-3.2: Create New Contact
 **Story Points:** 5
-**Prioritas:** P0 (Critical)
+**Priority:** P0 (Critical)
 
-**Yang Termasuk:**
+**Included:**
 - Form fields: Name (required), Position, Phone, Email, Is Primary
 - Validation: Name required, email format, phone format
 - Linked ke company (foreign key)
 - Save offline, sync online
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Create contact untuk company
 - ✅ Primary contact flag works
 - ✅ Syncs ke Supabase ketika online
@@ -282,21 +282,21 @@ Future<void> syncCompanyUpdate(Company local) async {
 
 #### ✅ US-3.3: Edit Contact
 **Story Points:** 2
-**Prioritas:** P1 (High)
+**Priority:** P1 (High)
 
-**Yang Termasuk:**
+**Included:**
 - Edit name, position, phone, email, is_primary
 - Reuse Create Contact form (pre-populated)
 - Update local DB + sync ke Supabase
 - **Last-Write-Wins conflict resolution** (automatic)
 - Works offline
 
-**Alasan Termasuk di MVP:**
+**Why Include in MVP:**
 - **Contact details change frequently:** Phone numbers, email addresses, job titles (promotion)
 - **Same rationale as Edit Company:** Data quality, prevent duplicates, user expectation
 - **Low complexity:** Reuse create form, UPDATE query (1-2 hari kerja)
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Edit contact offline → Saved locally
 - ✅ Go online → Syncs ke Supabase
 - ✅ Two users edit same contact → Latest timestamp wins
@@ -314,16 +314,16 @@ Future<void> syncCompanyUpdate(Company local) async {
 
 #### ✅ US-4.1: View List of Projects per Company
 **Story Points:** 3
-**Prioritas:** P0 (Critical)
+**Priority:** P0 (Critical)
 
-**Yang Termasuk:**
+**Included:**
 - List projects untuk selected company
 - **Pagination: 20 items per page**
 - Show project status (Active, Won, Lost, On Hold)
 - Show estimated value
 - Filter by status
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Lists projects untuk company
 - ✅ Pagination dengan 20+ projects
 - ✅ Filter by status works
@@ -332,9 +332,9 @@ Future<void> syncCompanyUpdate(Company local) async {
 
 #### ✅ US-4.2: Create New Project
 **Story Points:** 8
-**Prioritas:** P0 (Critical)
+**Priority:** P0 (Critical)
 
-**Yang Termasuk:**
+**Included:**
 - Form fields: Project Name, Type, Segmentation, Source, Status, Estimated Value, Expected Close Date, Primary Contact
 - **Currency as INTEGER cents** (P0 requirement - already in schema)
 - Validation: Name required, value >0, date not in past
@@ -355,7 +355,7 @@ final storedValue = currencyToInt(inputValue); // 5000000000 cents (INTEGER)
 final displayValue = intToCurrency(storedValue); // 50000000.00
 ```
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Create project dengan Rp 50,000,000 → Stored as 5,000,000,000 cents
 - ✅ Edit 100 kali → Value masih exact (no precision loss)
 - ✅ Syncs ke Supabase dengan INTEGER value
@@ -364,7 +364,7 @@ final displayValue = intToCurrency(storedValue); // 50000000.00
 
 #### ✅ US-4.3: Edit Project
 **Story Points:** 3 (INCLUDED in MVP - Exception to edit rule)
-**Prioritas:** P0 (Critical)
+**Priority:** P0 (Critical)
 
 **Why Include Edit untuk Projects (tapi tidak companies/contacts):**
 - Projects memiliki **Estimated Value** yang sering berubah (price negotiations)
@@ -372,7 +372,7 @@ final displayValue = intToCurrency(storedValue); // 50000000.00
 - Value changes trigger audit log (project_value_log table)
 - Core untuk tracking sales pipeline
 
-**Yang Termasuk:**
+**Included:**
 - Edit semua fields (sama seperti create)
 - **Value change logging** (audit trail)
 - Status updates
@@ -401,7 +401,7 @@ Future<void> updateProjectValue(String projectId, int newValueCents) async {
 }
 ```
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Edit project value → Log entry created
 - ✅ Edit status Active → Won → Log created
 - ✅ Works offline, syncs later
@@ -417,9 +417,9 @@ Future<void> updateProjectValue(String projectId, int newValueCents) async {
 
 #### ✅ US-5.1: Create Visit Report
 **Story Points:** 13
-**Prioritas:** P0 (Critical - CORE VALUE PROPOSITION)
+**Priority:** P0 (Critical - CORE VALUE PROPOSITION)
 
-**Yang Termasuk:**
+**Included:**
 - Form fields: Project (dropdown), Report Type (dropdown), Visit Date, Attendees (multi-select), Notes, Next Action, Outcome, Photos (max 10), GPS (auto-capture, optional)
 - **Draft auto-save setiap 30 detik** (P0 requirement)
 - Photo compression (<500KB per photo)
@@ -484,7 +484,7 @@ Future<void> uploadReportPhotos(String reportId, List<LocalAttachment> photos) a
 }
 ```
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Form auto-saves draft setiap 30s
 - ✅ Create report dengan 10 photos offline
 - ✅ Go online → Report syncs, photos upload individually
@@ -496,16 +496,16 @@ Future<void> uploadReportPhotos(String reportId, List<LocalAttachment> photos) a
 
 #### ✅ US-5.2: View Report Detail
 **Story Points:** 3
-**Prioritas:** P0 (Critical)
+**Priority:** P0 (Critical)
 
-**Yang Termasuk:**
+**Included:**
 - Display semua report fields (read-only)
 - Show attendees list dengan primary contact badge
 - Photo gallery (tap untuk full screen)
 - GPS location on map (jika available)
 - Sync status indicator
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ View report dengan semua details
 - ✅ Photos load dari local cache (offline)
 - ✅ GPS shows on map jika available
@@ -525,9 +525,9 @@ Future<void> uploadReportPhotos(String reportId, List<LocalAttachment> photos) a
 
 #### ✅ US-6.1: View My Reports (Sales Rep)
 **Story Points:** 5
-**Prioritas:** P0 (Critical)
+**Priority:** P0 (Critical)
 
-**Yang Termasuk:**
+**Included:**
 - List semua reports yang dibuat oleh current user
 - **Pagination: 20 items per page** (P0 requirement)
 - Filter by date range
@@ -535,7 +535,7 @@ Future<void> uploadReportPhotos(String reportId, List<LocalAttachment> photos) a
 - Sort by visit date (newest first)
 - Show sync status per report
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Shows first 20 reports
 - ✅ Pagination loads more
 - ✅ Filter by date works
@@ -545,9 +545,9 @@ Future<void> uploadReportPhotos(String reportId, List<LocalAttachment> photos) a
 
 #### ✅ US-6.2: View Team Reports (Manager)
 **Story Points:** 5
-**Prioritas:** P0 (Critical)
+**Priority:** P0 (Critical)
 
-**Yang Termasuk:**
+**Included:**
 - Manager sees ALL reports dari all sales reps (read-only)
 - **RLS policy enforcement** (P0 requirement - must test thoroughly)
 - Pagination (20 items per page)
@@ -567,7 +567,7 @@ USING (
 );
 ```
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Sales Rep A sees only Rep A's reports
 - ✅ Sales Rep B sees only Rep B's reports
 - ✅ Manager sees BOTH Rep A and Rep B reports
@@ -585,15 +585,15 @@ USING (
 
 #### ✅ US-7.1: Offline Create/Edit
 **Story Points:** 5
-**Prioritas:** P0 (Critical - CORE REQUIREMENT)
+**Priority:** P0 (Critical - CORE REQUIREMENT)
 
-**Yang Termasuk:**
+**Included:**
 - Semua create operations work offline
 - Data saved ke Drift (SQLite) immediately
 - No blocking pada network checks
 - Offline indicator di UI
 
-**Implementasi Teknis:**
+**Technical Implementation:**
 ```dart
 // Repository pattern - always write to local first
 @override
@@ -615,7 +615,7 @@ Future<void> createReport(Report report) async {
 }
 ```
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Turn off WiFi/data → Create company → Success
 - ✅ Create contact offline → Success
 - ✅ Create project offline → Success
@@ -626,9 +626,9 @@ Future<void> createReport(Report report) async {
 
 #### ✅ US-7.2: Auto Sync When Online
 **Story Points:** 8
-**Prioritas:** P0 (Critical - CORE REQUIREMENT)
+**Priority:** P0 (Critical - CORE REQUIREMENT)
 
-**Yang Termasuk:**
+**Included:**
 - Background auto-sync setiap 5 menit ketika online
 - **Sync transaction log** (P0 requirement - already in schema)
 - Retry logic dengan exponential backoff (2s → 4s → 8s, max 3 attempts)
@@ -705,7 +705,7 @@ Future<void> onAppStartup() async {
 }
 ```
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Create 20 entities offline → Go online → All sync in correct order
 - ✅ Kill app mid-sync → Restart → Resumes dari last successful sync
 - ✅ Network fails on entity #10 → Retry dengan exponential backoff
@@ -716,17 +716,17 @@ Future<void> onAppStartup() async {
 
 #### ✅ US-7.3: Manual Sync Button
 **Story Points:** 2
-**Prioritas:** P1 (High)
+**Priority:** P1 (High)
 
-**Yang Termasuk:**
+**Included:**
 - Manual sync button di UI (force sync now)
 - Shows sync progress (X/Y entities synced)
 - Shows last sync time
 - Pull-to-refresh pada list views triggers sync
 
-**Alasan Termasuk:** Memberi users control, builds trust dalam offline-first system.
+**Why Include:** Memberi users control, builds trust dalam offline-first system.
 
-**Tes Penerimaan:**
+**Acceptance Tests:**
 - ✅ Tap sync button → Immediate sync attempt
 - ✅ Shows progress (e.g., "Syncing 5/10 reports...")
 - ✅ Pull-to-refresh pada reports list → Sync + refresh
@@ -753,7 +753,7 @@ Future<void> onAppStartup() async {
 
 ## 📊 MVP Summary
 
-### Breakdown Story Points
+### Story Points Breakdown
 
 | Epic | Stories Included | Stories Deferred | Points (MVP) | Points (Deferred) |
 |------|------------------|------------------|--------------|-------------------|
@@ -772,7 +772,7 @@ Future<void> onAppStartup() async {
 
 Note: Total adalah 98 instead of 106 karena 8 points sudah dialokasikan ke Epic 8 (deferred).
 
-### Apa yang Membuat Ini MVP?
+### What Makes This MVP?
 
 **Core Value Delivered:**
 1. ✅ Sales reps dapat create **dan edit** structured data offline (lebih baik dari WhatsApp)
@@ -934,7 +934,7 @@ Note: Total adalah 98 instead of 106 karena 8 points sudah dialokasikan ke Epic 
 - [ ] No critical bugs
 - [ ] Performance targets met
 
-### MVP Selesai
+### MVP Complete
 - [ ] Semua 18 user stories delivered (77 points)
 - [ ] Semua P0 edge cases tested (partial sync, crash recovery, currency precision, RLS)
 - [ ] RLS policies tested dengan 2 sales reps + 1 manager
@@ -953,7 +953,7 @@ Note: Total adalah 98 instead of 106 karena 8 points sudah dialokasikan ke Epic 
 
 Checklist ini memastikan semua deliverables complete sebelum final payment/acceptance. Check off setiap item saat Anda menyelesaikannya.
 
-### Deliverable Code
+### Code Deliverables
 
 - [ ] **Complete Flutter Codebase**
   - Semua source code di folder `lib/` (organized by Clean Architecture layers)
@@ -1006,7 +1006,7 @@ Checklist ini memastikan semua deliverables complete sebelum final payment/accep
   - App name: "CSS Sales Report"
   - Min SDK: 21 (Android 5.0+)
 
-### Deliverable Dokumentasi
+### Documentation Deliverables
 
 - [ ] **SETUP.md** (Environment Setup untuk New Developers)
   - Flutter SDK installation steps
@@ -1047,7 +1047,7 @@ Checklist ini memastikan semua deliverables complete sebelum final payment/accep
   - Any assumptions made selama development
   - Performance bottlenecks (jika ada)
 
-### Deliverable Infrastruktur
+### Infrastructure Deliverables
 
 - [ ] **Supabase Project (Production-Ready)**
   - Semua 10 tables created (user_profiles, companies, contacts, projects, etc.)
@@ -1080,7 +1080,7 @@ Checklist ini memastikan semua deliverables complete sebelum final payment/accep
     - Dapat view semua 50 reports dari both reps
     - Cannot create/edit (read-only)
 
-### Transfer Pengetahuan
+### Knowledge Transfer
 
 - [ ] **2-Hour Handover Session** (Live Video Call)
   - Walkthrough of codebase structure (folders `lib/`)
@@ -1097,7 +1097,7 @@ Checklist ini memastikan semua deliverables complete sebelum final payment/accep
   - Available untuk clarification questions via email (response dalam 48 jam)
   - Total: Up to 5 jam post-delivery support included
 
-### Kriteria Penerimaan (Definition of Done)
+### Acceptance Criteria (Definition of Done)
 
 **Sebelum marking MVP as complete, semua yang berikut harus true:**
 
@@ -1211,7 +1211,7 @@ flutter build apk --release --split-per-abi
 
 ## 🔧 Technical Debt & Known Limitations
 
-### Limitasi yang Dapat Diterima untuk MVP
+### Acceptable Limitations untuk MVP
 1. **No edit/delete untuk reports**
    - Workaround: Create new record jika mistake
    - Fixed di Phase 2
@@ -1232,7 +1232,7 @@ flutter build apk --release --split-per-abi
    - Workaround: Manager views di app
    - Fixed di Phase 2
 
-### Technical Debt yang Harus Ditangani di Phase 2
+### Technical Debt to Address di Phase 2
 - Improve error messages (more context-specific)
 - Add offline indicator di UI (more prominent)
 - Optimize photo compression (parallel processing)
