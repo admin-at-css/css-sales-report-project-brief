@@ -346,42 +346,6 @@ Presentation → Data → Domain
 
 ---
 
-## 💡 What This Means for Your Estimate
-
-### If You've Only Built Basic CRUD Apps
-
-**Your initial estimate is probably 3-5x too low.**
-
-**Example:**
-- You think: "8 tables × 3 days = 24 days = Rp 4 juta"
-- Reality: "Offline-first + RLS + sync + tests = 12 weeks = Rp 18 juta"
-
-**Advice:** Be honest about your experience level. If you've never done offline-first, say so and price accordingly (include learning time).
-
-### If You've Built Offline-First Apps Before
-
-**You're in a good position, but don't underestimate:**
-- 31 RLS policies need careful testing
-- Clean Architecture adds structure overhead
-- Photo management with status tracking is non-trivial
-
-**Advice:** Reference your past projects. Show you understand the complexity.
-
-### Red Flags in Proposals
-
-- ❌ "4 juta cukup untuk semua, 3 minggu selesai"
-- ❌ No mention of offline-first complexity
-- ❌ No mention of RLS testing strategy
-- ❌ Generic estimate without per-Epic breakdown
-
-### Good Proposals
-
-- ✅ "4 juta cukup untuk Epic 1-3 (Authentication + Companies + Contacts), estimated 3-4 weeks"
-- ✅ "Full MVP (79 points) realistic budget adalah Rp 16 juta, 11 weeks, breakdown terlampir"
-- ✅ Mentions specific challenges: "RLS testing akan saya lakukan dengan 2 test users..."
-
----
-
 ## 📍 Langkah Selanjutnya
 
 **Sudah memahami kompleksitas project ini?**
