@@ -475,10 +475,10 @@ Sehingga pipeline saya tetap bersih
 
 ---
 
-### EPIC 5: Create Report (20 Story Points)
+### EPIC 5: Create Report (38 Story Points - Updated)
 
 #### US-5.1: Buat Visit Report
-**Story Points:** 13
+**Story Points:** 31 (+18 untuk nested inline creation)
 **Priority:** P0 (Critical - Core Feature)
 
 **User Story:**
@@ -488,7 +488,19 @@ Sehingga manager saya dapat melacak aktivitas saya
 
 **Acceptance Criteria:**
 1. Form fields:
-   - Project (required, dropdown dari user's projects)
+   - Project (required, dropdown dari user's projects ATAU create new inline)
+     - Dropdown menampilkan existing projects
+     - Opsi "[+ Buat Project Baru]" di bottom dropdown
+     - Jika dipilih → Inline project creation form expand
+     - **Nested Company Creation:**
+       - Company dropdown menampilkan existing companies
+       - Opsi "[+ Buat Company Baru]" di bottom
+       - Jika dipilih → Nested company form expand (1 field: Nama Company)
+     - **Nested Contact Creation:**
+       - Primary Contact dropdown menampilkan contacts dari selected company
+       - Opsi "[+ Buat Contact Baru]" di bottom
+       - Jika dipilih → Nested contact form expand (Nama, Posisi, Phone, Email)
+     - Semua project required fields harus diisi (US-4.2)
    - Report Type (required, dropdown): Initial Visit | Follow-up Meeting | Technical Presentation | Price Quotation | Closing Visit | After Sales Visit
    - Visit Date (required, date picker, default: today, tidak boleh future)
    - Attendees (required, multi-select dari company contacts, minimum 1, dengan penandaan primary contact)
@@ -503,8 +515,18 @@ Sehingga manager saya dapat melacak aktivitas saya
 5. **Draft auto-save setiap 30 detik** (`is_draft = true` di local DB)
 6. Simpan ke SQLite dan sync ke Supabase
 7. Success toast message
-8. Photos di-compress sebelum upload (target: <500KB masing-masing)
-9. Photos di-upload ke: `{user_id}/{year}/{month}/{report_id}/{photo_id}.jpg`
+8. **Nested Inline Creation (BARU - Critical untuk real-world workflow):**
+   - User dapat create new project tanpa leave report form
+   - Di dalam project form, user dapat create new company inline (jika belum ada)
+   - Di dalam project form, user dapat create new contact inline (jika belum ada)
+   - Semua nested forms menggunakan "bottom of dropdown" pattern untuk discoverability
+   - Setelah creating nested entity → Auto-selected di parent dropdown
+   - User dapat collapse inline forms tanpa save (dengan confirmation)
+   - Visual hierarchy: Report (white) → Project (light gray) → Company/Contact (light blue, indented)
+   - Success feedback: Green checkmark + toast message setelah setiap save
+   - Validation: Real-time untuk semua nested forms, disable save sampai valid
+9. Photos di-compress sebelum upload (target: <500KB masing-masing)
+10. Photos di-upload ke: `{user_id}/{year}/{month}/{report_id}/{photo_id}.jpg`
 
 **Technical Notes:**
 - GPS auto-capture dengan timeout 10s (set NULL jika gagal)
@@ -513,6 +535,14 @@ Sehingga manager saya dapat melacak aktivitas saya
 - Upload photos setelah report dibuat (batch upload)
 - Handle offline: Queue photo uploads untuk nanti
 - Set `created_by = current_user.id`
+- **Nested inline creation flow:**
+  - Save order: Company → Contact → Project → Report (maintain referential integrity)
+  - Semua entities disimpan ke SQLite immediately dengan is_synced=false
+  - Auto-link IDs: Company.id → Project.company_id, Contact.id → Project.primary_contact_id
+  - Validate semua nested entities sebelum allow report submission
+  - Jika user abandon inline creation → Draft entities disimpan, linked ke draft report
+  - Dropdown pattern: "[+ Buat [Entity] Baru]" selalu di bottom, blue/green text, ➕ icon
+- **UX specifications:** Lihat designer-brief/NESTED_INLINE_CREATION_WIREFRAMES.md
 
 **Dependencies:** US-4.2 (Create project), US-3.2 (Create contact)
 
@@ -910,11 +940,11 @@ Setiap user story dianggap SELESAI ketika:
 | EPIC 2: Manage Companies | 12 | 4 | P0 |
 | EPIC 3: Manage Contacts | 12 | 4 | P0 |
 | EPIC 4: Manage Projects | 15 | 4 | P0 |
-| EPIC 5: Create Report | 20 | 4 | P0 |
+| EPIC 5: Create Report | **38** (+18 nested inline creation) | 4 | P0 |
 | EPIC 6: View Reports & Dashboard | 15 | 3 | P0 |
 | EPIC 7: Offline & Sync | 17 | 4 | P0 |
 | EPIC 8: User Profile & Settings | 5 | 2 | P1-P2 |
-| **TOTAL** | **106** | **22** | |
+| **TOTAL** | **124** (+18 dari baseline) | **22** | |
 
 ### Priority Levels
 
@@ -926,19 +956,19 @@ Setiap user story dianggap SELESAI ketika:
 
 ## 7. Development Timeline Estimate
 
-**Total Story Points:** 106
+**Total Story Points:** 124 (+18 untuk nested inline creation)
 
 **Asumsi:**
 - Solo developer: 10-15 story points/minggu
-- Estimasi durasi: 7-11 minggu
-- Rekomendasi: 10 minggu dengan buffer
+- Estimasi durasi: 8-12 minggu
+- Rekomendasi: 11.5 minggu dengan buffer (+1.5 minggu untuk nested creation complexity)
 
 **Breakdown per Fase:**
 - Week 1-2: Setup + Authentication + Companies (17 pts)
 - Week 3-4: Contacts + Projects (27 pts)
-- Week 5-7: Reports (20 pts)
-- Week 8-9: Dashboard + Sync (32 pts)
-- Week 10: Profile + Testing + Bug fixes (10 pts)
+- Week 5-8: Reports dengan Nested Inline Creation (38 pts)
+- Week 9-10: Dashboard + Sync (32 pts)
+- Week 11-11.5: Profile + Testing + Bug fixes (10 pts)
 
 **Critical Path:** EPIC 7 (Offline & Sync) - Diperlukan untuk production readiness
 

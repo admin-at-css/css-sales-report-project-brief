@@ -273,82 +273,47 @@ Ini adalah 5 screens yang HARUS di-design di Week 1 untuk review:
 
 ### EPIC 5: Create & View Reports (6 Screens)
 
-#### 18. Create Report - Step 1: Select Project
-- **User Story:** US-5.1
+#### 18. Create Report Screen (UPDATED - Nested Inline Creation)
+- **User Story:** US-5.1 (Enhanced dengan +18 SP untuk nested inline creation)
 - **User:** Sales rep only
+- **Purpose:** Single-screen report creation dengan ability create project/company/contact inline
 - **Key Elements:**
-  - Top App Bar: "Buat Laporan" + back + cancel
-  - Progress indicator: "1 dari 4" atau stepper (Step 1/4)
-  - Search bar: "Cari proyek..."
-  - List of projects (grouped by company):
-    - Company name (section header)
-    - Project name + status badge
-  - Tap project → proceed to Step 2
+  - Top App Bar: "Buat Laporan Kunjungan" + back
+  - **Project Selection (Primary Field):**
+    - Dropdown dengan existing projects OR "[+ Buat Project Baru]" at bottom
+    - Auto-fills company/contact jika existing project selected
+  - **Inline Project Creation Card (Expandable):**
+    - Company dropdown dengan "[+ Buat Company Baru]" nested option
+    - Nested company creation form (1 field: Company Name)
+    - Primary Contact dropdown dengan "[+ Buat Contact Baru]" nested option
+    - Nested contact creation form (4 fields: Name, Position, Phone, Email)
+    - Project fields (Name, Type, Segmentation, Estimated Value)
+    - Visual depth: Light gray background, 5-10dp left indent
+  - **Report Fields:**
+    - Report Type, Visit Date, Attendees (multi-select), Notes, Next Action, Outcome, Photos (1-10), GPS (optional)
+  - **State Management:**
+    - Auto-save draft every 30s (includes draft project/company/contact)
+    - Real-time validation untuk all nested forms
+    - Success feedback: Green checkmark + toast after each nested save
+  - Bottom actions: "Batalkan" (secondary) | "Simpan Laporan" (primary)
 - **States:**
-  - Empty (belum ada projects - show CTA untuk create project dulu)
-  - Loaded
+  - Default (no project selected)
+  - Project dropdown open (with existing + create new option)
+  - Inline project creation expanded
+  - Nested company creation expanded (Level 3)
+  - Nested contact creation expanded (Level 3)
+  - After nested save - success (checkmarks, toast)
+  - Validation errors (real-time, per field)
+  - Submitting (spinner + disabled)
+- **Interactions:**
+  - Tap "[+ Buat Project Baru]" → Inline project form expands (300ms animation)
+  - Tap "[+ Buat Company Baru]" → Nested company form expands within project form
+  - After nested save → Form collapses, entity auto-selected in parent dropdown
+  - User can collapse without saving (show confirmation: "Buang perubahan?")
+- **Wireframes:** See NESTED_INLINE_CREATION_WIREFRAMES.md for complete UI states
+- **Priority:** P0 (Critical - matches real sales rep workflow)
 
-#### 19. Create Report - Step 2: Report Form
-- **User Story:** US-5.1
-- **User:** Sales rep only
-- **Key Elements:**
-  - Top App Bar: "Buat Laporan" + back + save draft
-  - Progress: "2 dari 4"
-  - Selected project info (card at top, tidak editable, ada "Ganti Proyek" link)
-  - Form fields:
-    - Tipe Laporan* (dropdown: Meeting, Site Visit, Quotation, Follow-up, Other)
-    - Tanggal Kunjungan* (date picker, default: today)
-    - Peserta* (multi-select dari contacts perusahaan ini + primary contact auto-selected)
-    - Catatan (multiline text area, optional)
-    - Tindakan Selanjutnya (text input, optional)
-    - Hasil/Outcome (text input, optional)
-  - GPS auto-capture indicator: "Lokasi: [Latitude, Longitude] ✓" atau "Lokasi tidak tersedia"
-  - Bottom actions: Kembali | Lanjut
-  - Draft auto-save: "Terakhir disimpan 30 detik yang lalu"
-
-#### 20. Create Report - Step 3: Add Photos
-- **User Story:** US-5.1
-- **User:** Sales rep only
-- **Key Elements:**
-  - Top App Bar: "Tambah Foto" + back + save draft
-  - Progress: "3 dari 4"
-  - Photo grid (max 10 photos):
-    - Thumbnail view (100x100dp)
-    - Each photo has X button (remove photo)
-  - Upload buttons:
-    - "Ambil Foto" (camera icon)
-    - "Pilih dari Galeri" (gallery icon)
-  - Photo counter: "3 dari 10 foto"
-  - Bottom actions: Lewati (skip) | Lanjut
-- **States:**
-  - No photos (show empty state + CTA)
-  - 1-10 photos uploaded
-  - Max photos (10) → disable upload buttons
-- **Notes:**
-  - Photos di-compress otomatis di background (tidak perlu UI, tapi show success indicator)
-
-#### 21. Create Report - Step 4: Review & Submit
-- **User Story:** US-5.1
-- **User:** Sales rep only
-- **Key Elements:**
-  - Top App Bar: "Review Laporan" + back
-  - Progress: "4 dari 4"
-  - Review sections (collapsed accordion):
-    - Proyek (expand to see: company, project name, primary contact)
-    - Detail Laporan (expand: tipe, tanggal, peserta, catatan, next action, outcome)
-    - Foto (expand: photo grid)
-    - Lokasi (expand: GPS coordinates + map preview if available)
-  - Edit buttons per section (navigate back to that step)
-  - Bottom actions:
-    - "Simpan sebagai Draft" (secondary)
-    - "Submit Laporan" (primary)
-- **States:**
-  - Review mode (semua collapsed)
-  - Expanded sections
-  - Submitting (button spinner + disable form)
-  - Success (show confirmation + redirect)
-
-#### 22. Report Detail View
+#### 19. Report Detail View
 - **User Story:** US-5.2
 - **User:** Sales rep (own reports), Manager (all reports)
 - **Key Elements:**

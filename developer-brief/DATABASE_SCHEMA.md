@@ -717,6 +717,13 @@ class LocalReports extends Table {
 - Draft reports TIDAK di-sync sampai finalized
 - Mencegah data loss saat app crashes (US-5.1 requirement)
 
+**Nested Draft Support (BARU - untuk Inline Creation):**
+- Draft reports dapat di-link ke draft projects (is_draft = true)
+- Draft projects dapat di-link ke draft companies/contacts (is_draft = true)
+- Jika user abandon report mid-creation → Semua draft entities disimpan bersama
+- Cleanup strategy: Jika draft report dihapus → Cascade delete draft project/company/contact
+- Recovery: Saat user kembali, show prompt "Anda memiliki laporan draft dengan project '[Name]'"
+
 **Catatan:** Koordinat GPS (latitude/longitude) tetap sebagai REAL - presisi tidak critical untuk location
 
 ---

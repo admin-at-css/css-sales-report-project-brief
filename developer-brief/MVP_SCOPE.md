@@ -7,9 +7,9 @@
 **Project:** CSS Sales Report Application
 **Phase:** MVP (Minimum Viable Product)
 **Versi:** 1.1 (Revised - Edit Included)
-**Terakhir Diperbarui:** 2025-10-28
-**Target Durasi:** 10-12 Minggu
-**Total Story Points:** 77 (73% dari full scope)
+**Terakhir Diperbarui:** November 2025
+**Target Durasi:** 11.5-13 Minggu (+1.5 minggu untuk nested inline creation)
+**Total Story Points:** 95 (+18 untuk nested inline creation enhancement)
 
 ---
 
@@ -30,6 +30,7 @@ Memberikan working offline-first mobile app yang memungkinkan **2 sales reps** m
 **✅ IN MVP:**
 - Full offline-first capability
 - Create companies, contacts, projects, reports
+- **Nested inline creation** - Create project/company/contact inline saat buat report (matches real workflow)
 - **Edit companies, contacts, projects** (kualitas data sangat penting)
 - View semua created entities
 - Manager dashboard dengan team reports
@@ -761,16 +762,16 @@ Future<void> onAppStartup() async {
 | EPIC 2: Companies | 3/4 | 1 | 10 | 2 |
 | EPIC 3: Contacts | 3/4 | 1 | 10 | 2 |
 | EPIC 4: Projects | 3/4 | 1 | 11 | 1 |
-| EPIC 5: Reports | 2/4 | 2 | 16 | 4 |
+| EPIC 5: Reports | 2/4 | 2 | **34** (+18 nested inline) | 4 |
 | EPIC 6: Dashboard | 2/3 | 1 | 10 | 5 |
 | EPIC 7: Offline/Sync | 3/4 | 1 | 15 | 2 |
 | EPIC 8: Profile | 0/2 | 2 | 0 | 5 |
-| **TOTAL** | **18/27** | **9** | **77** | **21** |
+| **TOTAL** | **18/27** | **9** | **95** (+18) | **21** |
 
-**MVP = 77 story points (79% dari 98 story points across 8 epics)**
+**MVP = 95 story points (+18 untuk nested inline creation)**
 **Deferred = 21 story points (21%)**
 
-Note: Total adalah 98 instead of 106 karena 8 points sudah dialokasikan ke Epic 8 (deferred).
+Note: +18 story points ditambahkan ke US-5.1 untuk **Nested Inline Creation** - kemampuan create project/company/contact inline saat buat report. Ini critical untuk match real-world workflow dimana sales reps berpikir "project-first".
 
 ### What Makes This MVP?
 
@@ -789,6 +790,20 @@ Note: Total adalah 98 instead of 106 karena 8 points sudah dialokasikan ke Epic 
 - **Pagination mandatory:** Performance requirement (list views freeze dengan 100+ items)
 - **Security non-negotiable:** RLS policies tested thoroughly
 - **Data integrity non-negotiable:** Currency as INTEGER, transaction log, per-photo status
+
+### Technical Challenges (Added Nov 2025)
+
+**Nested Inline Creation Complexity (+18 SP):**
+- **Challenge:** Multi-level form state management (3 levels: Report → Project → Company/Contact)
+- **Complexity:** Real-time validation across nested entities, rollback logic jika save gagal
+- **Risk:** Higher bug potential dengan complex state, orphaned draft entities jika user abandons
+- **Mitigation:**
+  - Comprehensive unit tests untuk nested creation flows
+  - Progressive disclosure untuk reduce UI clutter
+  - Draft entities linked ke draft report untuk cleanup
+  - Clear visual hierarchy (colors + indentation) untuk Budi's profile
+- **Timeline Impact:** +1.5 minggu (Week 7-10 untuk Sprint 4)
+- **Value:** Sepenuhnya menyelesaikan real-world workflow friction - sales reps tidak pernah leave report screen
 
 ---
 
@@ -840,13 +855,20 @@ Note: Total adalah 98 instead of 106 karena 8 points sudah dialokasikan ke Epic 
 
 ---
 
-### Sprint 4: Reports - Core Feature (Week 7-8)
-**Goal:** Create visit reports dengan draft auto-save
+### Sprint 4: Reports - Core Feature dengan Nested Inline Creation (Week 7-10)
+**Goal:** Create visit reports dengan nested inline creation dan draft auto-save
 
 **Tasks:**
-1. US-5.1: Create Report (form, validation)
-2. Draft auto-save implementation (setiap 30s)
-3. Photo picker integration
+1. US-5.1 Part 1: Basic Create Report form (form, validation) - 13 SP
+2. US-5.1 Part 2: Nested Inline Creation - 18 SP
+   - Inline project creation (expandable form)
+   - Nested company creation (bottom of dropdown pattern)
+   - Nested contact creation (bottom of dropdown pattern)
+   - Multi-level state management
+   - Real-time validation untuk nested forms
+   - Success feedback (toast, checkmarks, animations)
+3. Draft auto-save implementation (setiap 30s, includes draft nested entities)
+4. Photo picker integration
 4. Photo compression (<500KB)
 5. GPS auto-capture (dengan timeout, optional)
 6. US-5.2: View Report Detail
