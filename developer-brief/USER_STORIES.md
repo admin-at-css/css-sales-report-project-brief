@@ -487,28 +487,50 @@ Saya ingin membuat visit report
 Sehingga manager saya dapat melacak aktivitas saya
 
 **Acceptance Criteria:**
-1. Form fields:
-   - Project (required, dropdown dari user's projects ATAU create new inline)
-     - Dropdown menampilkan existing projects
-     - Opsi "[+ Buat Project Baru]" di bottom dropdown
-     - Jika dipilih → Inline project creation form expand
-     - **Nested Company Creation:**
-       - Company dropdown menampilkan existing companies
-       - Opsi "[+ Buat Company Baru]" di bottom
-       - Jika dipilih → Nested company form expand (1 field: Nama Company)
-     - **Nested Contact Creation:**
-       - Primary Contact dropdown menampilkan contacts dari selected company
-       - Opsi "[+ Buat Contact Baru]" di bottom
-       - Jika dipilih → Nested contact form expand (Nama, Posisi, Phone, Email)
-     - Semua project required fields harus diisi (US-4.2)
-   - Report Type (required, dropdown): Initial Visit | Follow-up Meeting | Technical Presentation | Price Quotation | Closing Visit | After Sales Visit
-   - Visit Date (required, date picker, default: today, tidak boleh future)
-   - Attendees (required, multi-select dari company contacts, minimum 1, dengan penandaan primary contact)
-   - Notes (optional, text area, max 5000 karakter)
-   - Next Action (optional, text area, max 5000 karakter)
-   - Outcome (optional, dropdown): Positive | Neutral | Negative
-   - Photos (optional, max 10, dari camera atau gallery)
-   - GPS (auto-capture saat form dibuka, OPTIONAL - tidak blocking jika ditolak/tidak ada signal)
+1. Form fields (PROGRESSIVE DISCLOSURE):
+   - **Report Type (required, dropdown) - FIRST FIELD:**
+     - Options: Initial Visit | Follow-up Meeting | Technical Presentation | Price Quotation | Closing Visit | After Sales Visit
+     - Menentukan branching logic untuk flow selanjutnya
+     - Icon "🆕" untuk Initial Visit (menandakan flow berbeda)
+     - Divider setelah Initial Visit untuk pemisahan visual
+
+   - **BRANCHING LOGIC berdasarkan Report Type:**
+
+     **A. Jika "Initial Visit" dipilih → FULL FLOW (5 sections):**
+     - Project (required, dropdown dari user's projects ATAU create new inline)
+       - Dropdown menampilkan existing projects
+       - Opsi "➕ Create New Project" di **TOP** dropdown (FIXED position, green text, SELALU visible)
+       - Solid divider memisahkan "Create New" dari existing items
+       - Jika dipilih → Inline project creation form expand
+       - **Nested Company Creation dalam Project form:**
+         - Company dropdown menampilkan existing companies
+         - Opsi "➕ Create New Company" di TOP dropdown
+         - Jika dipilih → Nested company form expand (1 field: Nama Company)
+       - **Nested Contact Creation dalam Project form:**
+         - Primary Contact dropdown menampilkan contacts dari selected company
+         - Opsi "➕ Create New Contact" di TOP dropdown
+         - Jika dipilih → Nested contact form expand (Nama, Posisi, Phone, Email)
+       - Semua project required fields harus diisi (US-4.2)
+     - Company (auto-filled dari selected/created project, dengan opsi create new inline)
+     - Contact (auto-filled primary contact dari project, dengan opsi add new inline)
+     - Report Details (Visit Date, Attendees, Notes, Next Action, Outcome, Photos, GPS)
+
+     **B. Jika tipe lain dipilih → QUICK FLOW (3 sections):**
+     - Project (required, dropdown dari user's existing projects SAJA - NO CREATE NEW)
+       - Hanya menampilkan existing projects
+       - Tidak ada opsi "Create New" (follow-up = existing project by definition)
+     - Company (auto-filled, read-only dari selected project)
+     - Contact (auto-filled, read-only primary contact, dengan opsi add new attendee)
+     - Report Details (Visit Date, Attendees, Notes, Next Action, Outcome, Photos, GPS)
+
+   - **Report Details Section (semua report types):**
+     - Visit Date (required, date picker, default: today, tidak boleh future)
+     - Attendees (required, multi-select dari company contacts, minimum 1, dengan penandaan primary contact)
+     - Notes (optional, text area, max 5000 karakter)
+     - Next Action (optional, text area, max 5000 karakter)
+     - Outcome (optional, dropdown): Positive | Neutral | Negative
+     - Photos (optional, max 10, dari camera atau gallery)
+     - GPS (auto-capture saat form dibuka, OPTIONAL - tidak blocking jika ditolak/tidak ada signal)
 2. Validasi: Visit date tidak boleh di future
 3. Validasi: Minimal 1 attendee dipilih
 4. Validasi: Tepat 1 attendee ditandai sebagai primary
@@ -516,15 +538,21 @@ Sehingga manager saya dapat melacak aktivitas saya
 6. Simpan ke SQLite dan sync ke Supabase
 7. Success toast message
 8. **Nested Inline Creation (BARU - Critical untuk real-world workflow):**
-   - User dapat create new project tanpa leave report form
+   - User dapat create new project tanpa leave report form (hanya untuk "Initial Visit")
    - Di dalam project form, user dapat create new company inline (jika belum ada)
    - Di dalam project form, user dapat create new contact inline (jika belum ada)
-   - Semua nested forms menggunakan "bottom of dropdown" pattern untuk discoverability
+   - Semua nested forms menggunakan "**TOP of dropdown**" pattern (BUKAN bottom) untuk discoverability
+   - "Create New" option FIXED di TOP, green text (#4CAF50), ➕ icon, SELALU visible bahkan saat typing
+   - Solid divider line memisahkan "Create New" dari existing items
+   - Combo boxes SCROLLABLE tanpa perlu typing (typing adalah optional untuk filter)
    - Setelah creating nested entity → Auto-selected di parent dropdown
    - User dapat collapse inline forms tanpa save (dengan confirmation)
-   - Visual hierarchy: Report (white) → Project (light gray) → Company/Contact (light blue, indented)
-   - Success feedback: Green checkmark + toast message setelah setiap save
-   - Validation: Real-time untuk semua nested forms, disable save sampai valid
+   - Visual hierarchy: Report (white) → Project (light blue bg #E3F2FD, 10dp indent)
+   - Success feedback: Green checkmark ✓ + collapsed section header + edit icon ✏️
+   - Validation: Real-time untuk semua nested forms, disable "Continue" sampai valid
+   - Progressive disclosure: Sections unlock satu-per-satu setelah completion
+   - Auto-scroll: Smooth animation (300ms) ke section berikutnya setelah completion
+   - Progress indicator: "X of Y • Section Name" di top setiap section
 9. Photos di-compress sebelum upload (target: <500KB masing-masing)
 10. Photos di-upload ke: `{user_id}/{year}/{month}/{report_id}/{photo_id}.jpg`
 
@@ -535,14 +563,20 @@ Sehingga manager saya dapat melacak aktivitas saya
 - Upload photos setelah report dibuat (batch upload)
 - Handle offline: Queue photo uploads untuk nanti
 - Set `created_by = current_user.id`
-- **Nested inline creation flow:**
+- **Report Type branching logic:**
+  - Report Type HARUS dipilih pertama (unlock semua sections lain)
+  - "Initial Visit" → enables project creation (5 sections total)
+  - Tipe lain → existing projects only (3 sections total)
+  - Validation: Block submission jika Report Type belum dipilih
+- **Nested inline creation flow (Initial Visit only):**
   - Save order: Company → Contact → Project → Report (maintain referential integrity)
   - Semua entities disimpan ke SQLite immediately dengan is_synced=false
   - Auto-link IDs: Company.id → Project.company_id, Contact.id → Project.primary_contact_id
   - Validate semua nested entities sebelum allow report submission
   - Jika user abandon inline creation → Draft entities disimpan, linked ke draft report
-  - Dropdown pattern: "[+ Buat [Entity] Baru]" selalu di bottom, blue/green text, ➕ icon
-- **UX specifications:** Lihat designer-brief/NESTED_INLINE_CREATION_WIREFRAMES.md
+  - Dropdown pattern: "➕ Create New [Entity]" selalu di TOP (FIXED position), green text, solid divider
+  - Progressive disclosure dengan ExpansionTile, auto-scroll dengan ScrollController
+- **UX specifications:** Lihat designer-brief/NESTED_INLINE_CREATION_WIREFRAMES.md (17 wireframes)
 
 **Dependencies:** US-4.2 (Create project), US-3.2 (Create contact)
 

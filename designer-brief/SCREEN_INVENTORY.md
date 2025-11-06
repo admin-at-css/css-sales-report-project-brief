@@ -273,45 +273,89 @@ Ini adalah 5 screens yang HARUS di-design di Week 1 untuk review:
 
 ### EPIC 5: Create & View Reports (6 Screens)
 
-#### 18. Create Report Screen (UPDATED - Nested Inline Creation)
+#### 18. Create Report Screen (v2.0 - Report Type First + Branching Logic)
 - **User Story:** US-5.1 (Enhanced dengan +18 SP untuk nested inline creation)
 - **User:** Sales rep only
-- **Purpose:** Single-screen report creation dengan ability create project/company/contact inline
+- **Purpose:** Progressive disclosure report creation - Report Type determines complexity
 - **Key Elements:**
   - Top App Bar: "Buat Laporan Kunjungan" + back
-  - **Project Selection (Primary Field):**
-    - Dropdown dengan existing projects OR "[+ Buat Project Baru]" at bottom
-    - Auto-fills company/contact jika existing project selected
-  - **Inline Project Creation Card (Expandable):**
-    - Company dropdown dengan "[+ Buat Company Baru]" nested option
-    - Nested company creation form (1 field: Company Name)
-    - Primary Contact dropdown dengan "[+ Buat Contact Baru]" nested option
-    - Nested contact creation form (4 fields: Name, Position, Phone, Email)
-    - Project fields (Name, Type, Segmentation, Estimated Value)
-    - Visual depth: Light gray background, 5-10dp left indent
-  - **Report Fields:**
-    - Report Type, Visit Date, Attendees (multi-select), Notes, Next Action, Outcome, Photos (1-10), GPS (optional)
-  - **State Management:**
-    - Auto-save draft every 30s (includes draft project/company/contact)
-    - Real-time validation untuk all nested forms
-    - Success feedback: Green checkmark + toast after each nested save
-  - Bottom actions: "Batalkan" (secondary) | "Simpan Laporan" (primary)
-- **States:**
-  - Default (no project selected)
-  - Project dropdown open (with existing + create new option)
-  - Inline project creation expanded
-  - Nested company creation expanded (Level 3)
-  - Nested contact creation expanded (Level 3)
-  - After nested save - success (checkmarks, toast)
-  - Validation errors (real-time, per field)
-  - Submitting (spinner + disabled)
+
+  - **Section 1: Report Type (ALWAYS FIRST):**
+    - Dropdown: Initial Visit | Follow-up Meeting | Technical Presentation | Price Quotation | Closing Visit | After Sales Visit
+    - Icon 🆕 untuk "Initial Visit" (flow berbeda)
+    - Divider setelah Initial Visit
+    - Unlocks sections berikutnya setelah selected
+    - Progress indicator: "1 of 5 • Report Type" atau "1 of 3 • Report Type"
+
+  - **BRANCHING LOGIC:**
+
+    **A. Initial Visit → FULL FLOW (5 sections):**
+    - **Section 2: Project**
+      - "➕ Create New Project" di TOP dropdown (FIXED, green text, always visible)
+      - Solid divider memisahkan Create New dari existing items
+      - Scrollable list existing projects (tap or type to filter)
+      - Inline project creation dengan nested company/contact
+    - **Section 3: Company**
+      - Auto-filled dari project atau create new inline
+    - **Section 4: Contact**
+      - Auto-filled dari project atau create new inline
+    - **Section 5: Report Details**
+      - Visit Date, Attendees, Notes, Next Action, Outcome, Photos, GPS
+
+    **B. Tipe Lain → QUICK FLOW (3 sections):**
+    - **Section 2: Project**
+      - Existing projects ONLY (no Create New option)
+      - Company/Contact auto-filled, read-only
+    - **Section 3: Report Details**
+      - Visit Date, Attendees, Notes, Next Action, Outcome, Photos, GPS
+
+  - **Progressive Disclosure Pattern:**
+    - Sections unlock satu-per-satu setelah completion
+    - Auto-scroll (300ms animation) ke section berikutnya
+    - Completed sections collapse dengan ✓ checkmark + edit icon ✏️
+    - Tap edit icon → Reopen section untuk modify
+    - Helper text untuk locked sections: "Pilih report type dulu"
+
+  - **Inline Creation Pattern (Initial Visit only):**
+    - Light blue background (#E3F2FD), 10dp left indent
+    - "Cancel" (secondary) | "Continue ➜" (primary) buttons
+    - Real-time validation, disable Continue sampai valid
+    - Nested company/contact creation DALAM project form
+
+  - Bottom: "SUBMIT REPORT" button (disabled sampai semua complete)
+
+- **States (17 wireframes total - see NESTED_INLINE_CREATION_WIREFRAMES.md):**
+  1. Initial load (Report Type active, lainnya locked)
+  2. Report Type dropdown expanded
+  3. After Initial Visit selected (Project unlocks)
+  4. Project combo expanded (Create New at top)
+  5. Project combo filtered (typing "Factory")
+  6. Inline project form expanded
+  7. Company section unlocked
+  8. Company combo expanded
+  9. Inline company form
+  10. Contact section unlocked
+  11. Contact combo (filtered by company)
+  12. Inline contact form
+  13. Report Details unlocked (all collapsed)
+  14. Report Details scrolled (notes, photos)
+  15. Report Details with photos & GPS
+  16. Follow-up flow (3 sections only)
+  17. Follow-up after project selected
+
 - **Interactions:**
-  - Tap "[+ Buat Project Baru]" → Inline project form expands (300ms animation)
-  - Tap "[+ Buat Company Baru]" → Nested company form expands within project form
-  - After nested save → Form collapses, entity auto-selected in parent dropdown
-  - User can collapse without saving (show confirmation: "Buang perubahan?")
-- **Wireframes:** See NESTED_INLINE_CREATION_WIREFRAMES.md for complete UI states
-- **Priority:** P0 (Critical - matches real sales rep workflow)
+  - Tap Report Type → Dropdown expands, show 6 options
+  - Select "Initial Visit" → Project section unlocks + auto-scroll
+  - Select tipe lain → Project section unlocks (existing only) + auto-scroll
+  - Tap "➕ Create New" (TOP of dropdown) → Inline form expands
+  - Type in search box → Filters results, Create New tetap at TOP
+  - Complete section → Auto-collapse + checkmark + auto-scroll next
+  - Tap ✏️ edit icon → Reopen collapsed section
+  - Draft auto-save setiap 30s (all sections)
+
+- **Wireframes:** NESTED_INLINE_CREATION_WIREFRAMES.md (17 complete states)
+- **Design System:** Colors, measurements, animations documented in wireframes
+- **Priority:** P0 (Critical - optimizes for 80% use case: repeat customers)
 
 #### 19. Report Detail View
 - **User Story:** US-5.2

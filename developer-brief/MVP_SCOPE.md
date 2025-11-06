@@ -417,16 +417,45 @@ Future<void> updateProjectValue(String projectId, int newValueCents) async {
 ### EPIC 5: Create Report (16 Story Points)
 
 #### ✅ US-5.1: Create Visit Report
-**Story Points:** 13
+**Story Points:** 31 (+18 untuk nested inline creation)
 **Priority:** P0 (Critical - CORE VALUE PROPOSITION)
 
 **Included:**
-- Form fields: Project (dropdown), Report Type (dropdown), Visit Date, Attendees (multi-select), Notes, Next Action, Outcome, Photos (max 10), GPS (auto-capture, optional)
-- **Draft auto-save setiap 30 detik** (P0 requirement)
+- **Progressive Disclosure UI Pattern:**
+  - **Report Type FIRST** (determines branching logic)
+  - Initial Visit → Full flow 5 sections (can create new project/company/contact)
+  - Tipe lain → Quick flow 3 sections (existing project only)
+  - Sections unlock progressively setelah completion
+  - Auto-scroll (300ms) ke section berikutnya
+  - Completed sections collapse dengan ✓ + edit icon ✏️
+
+- **Branching Logic:**
+  - Report Type menentukan complexity
+  - Initial Visit = new customer path (20% of use cases)
+  - Follow-up/lainnya = repeat customer path (80% of use cases - OPTIMIZED)
+
+- **Nested Inline Creation (Initial Visit only):**
+  - "➕ Create New [Entity]" at TOP of dropdowns (FIXED, green text, always visible)
+  - Scrollable combo boxes (typing optional untuk filter)
+  - Inline project creation dengan nested company/contact forms
+  - Light blue bg (#E3F2FD), 10dp indent untuk visual depth
+  - Real-time validation per nested form
+
+- Form fields: Report Type (dropdown - FIRST), Project (dropdown), Visit Date, Attendees (multi-select), Notes, Next Action, Outcome, Photos (max 10), GPS (auto-capture, optional)
+- **Draft auto-save setiap 30 detik** (P0 requirement - includes nested entities)
 - Photo compression (<500KB per photo)
 - **Per-photo sync status tracking** (P0 requirement - already in schema)
 - GPS auto-capture dengan 10s timeout (non-blocking jika denied)
 - Save offline, sync online
+
+**Why +18 SP:**
+- Multi-level progressive disclosure (5 collapsible sections dengan state management)
+- Report Type branching logic (2 different flows based on selection)
+- Nested inline creation (3 levels: Report → Project → Company/Contact)
+- "Create New at TOP" combo box pattern (custom widget, pinned positioning)
+- Auto-scroll coordination dengan section completion
+- Real-time validation across nested forms
+- Draft handling untuk abandoned nested entities
 
 **Draft Auto-Save Implementation:**
 ```dart
@@ -771,7 +800,14 @@ Future<void> onAppStartup() async {
 **MVP = 95 story points (+18 untuk nested inline creation)**
 **Deferred = 21 story points (21%)**
 
-Note: +18 story points ditambahkan ke US-5.1 untuk **Nested Inline Creation** - kemampuan create project/company/contact inline saat buat report. Ini critical untuk match real-world workflow dimana sales reps berpikir "project-first".
+Note: +18 story points ditambahkan ke US-5.1 untuk **Progressive Disclosure + Nested Inline Creation**:
+- **Report Type First:** Determines flow complexity (Initial Visit = 5 sections vs Follow-up = 3 sections)
+- **Branching Logic:** Optimizes untuk 80% use case (repeat customers: 2-3 menit vs new customers: 5-10 menit)
+- **Nested Inline Creation:** Kemampuan create project/company/contact inline saat buat report (Initial Visit only)
+- **Create New at TOP:** Pattern baru dimana "Create New" di TOP dropdown (FIXED, always visible), bukan di bottom
+- **Progressive Disclosure:** Sections unlock dan auto-scroll setelah completion, dengan edit capability
+
+Ini critical untuk match real-world workflow: sales reps naturally berpikir "Apa tipe kunjungan ini?" SEBELUM pilih project. Initial Visit = new opportunity (perlu create entities), Follow-up = existing project (quick entry).
 
 ### What Makes This MVP?
 
@@ -855,19 +891,26 @@ Note: +18 story points ditambahkan ke US-5.1 untuk **Nested Inline Creation** - 
 
 ---
 
-### Sprint 4: Reports - Core Feature dengan Nested Inline Creation (Week 7-10)
-**Goal:** Create visit reports dengan nested inline creation dan draft auto-save
+### Sprint 4: Reports - Core Feature dengan Progressive Disclosure + Nested Inline Creation (Week 7-10)
+**Goal:** Create visit reports dengan Report Type branching logic, nested inline creation, dan draft auto-save
 
 **Tasks:**
 1. US-5.1 Part 1: Basic Create Report form (form, validation) - 13 SP
-2. US-5.1 Part 2: Nested Inline Creation - 18 SP
-   - Inline project creation (expandable form)
-   - Nested company creation (bottom of dropdown pattern)
-   - Nested contact creation (bottom of dropdown pattern)
-   - Multi-level state management
-   - Real-time validation untuk nested forms
-   - Success feedback (toast, checkmarks, animations)
-3. Draft auto-save implementation (setiap 30s, includes draft nested entities)
+2. US-5.1 Part 2: Progressive Disclosure + Nested Inline Creation - 18 SP
+   - **Report Type First:** Dropdown dengan branching logic (Initial Visit vs Follow-up)
+   - **Progressive Disclosure:** 5 collapsible sections dengan ExpansionTile
+   - **Auto-scroll:** ScrollController animation (300ms) ke section berikutnya
+   - **Section State Management:** Unlock/lock, collapse/expand, edit capability
+   - **Branching Logic:** Different flows untuk Initial Visit (5 sections) vs Follow-up (3 sections)
+   - **Inline Project Creation:** Expandable form dengan light blue bg, 10dp indent
+   - **"Create New at TOP" Pattern:** FIXED position di TOP dropdown (BUKAN bottom), green text, always visible
+   - **Nested Company/Contact Creation:** Di dalam project form (3 levels deep)
+   - **Scrollable Combo Boxes:** Typing optional untuk filter
+   - **Multi-level State Management:** Report → Project → Company/Contact
+   - **Real-time Validation:** Per nested form dengan disable Continue sampai valid
+   - **Success Feedback:** Green checkmark ✓, collapsed header dengan edit icon ✏️
+   - **Progress Indicator:** "X of Y • Section Name" per section
+3. Draft auto-save implementation (setiap 30s, includes draft nested entities dan Report Type)
 4. Photo picker integration
 4. Photo compression (<500KB)
 5. GPS auto-capture (dengan timeout, optional)

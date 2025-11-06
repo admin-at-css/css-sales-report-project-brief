@@ -1,796 +1,444 @@
-# Nested Inline Creation - UX Wireframes & Specifications
-## CSS Sales Report - Create Report Flow Enhancement
+# Nested Inline Creation - Complete Wireframes
+## CSS Sales Report App - Report Creation Flow (CORRECTED)
 
-← [Sebelumnya: User Stories for Designer](./USER_STORIES_FOR_DESIGNER.md)
+← [Sebelumnya: SCREEN_INVENTORY.md](./SCREEN_INVENTORY.md)
 
 ---
 
-**Versi:** 1.0
+**Versi:** 2.0 (CORRECTED - Report Type First)
 **Terakhir Diperbarui:** November 2025
 **Target User:** Budi (47, basic tech) & Dina (32, tech-savvy)
 
 ---
 
-## 📋 Problem Statement
+## ⚠️ MAJOR UPDATE: Flow Corrected
 
-### Workflow Gap Yang Ditemukan
-
-**Current Documented Flow:**
-```
-Step 1: User membuat Company (separate screen)
-Step 2: User membuat Contact (separate screen)
-Step 3: User membuat Project (separate screen)
-Step 4: User membuat Report (select project dari dropdown)
-```
-
-**Real-World Sales Rep Workflow:**
-```
-Step 1: Sales rep melakukan visit
-Step 2: Setelah meeting, langsung ingin buat report
-Step 3: Berpikir: "Project apa ini?" (project-first mental model)
-Step 4: BLOCKED jika project/company belum ada → Harus abandon report
-```
-
-**Masalah:**
-- ❌ Sales rep harus meninggalkan report form untuk create dependencies
-- ❌ Tidak sesuai mental model ("Project duluan, company adalah property dari project")
-- ❌ Melanggar goal "< 5 menit per report" (jika company baru, +3-5 menit)
-- ❌ Bad first-time experience (new customer visit = BLOCKED)
-- ❌ Budi akan frustasi dan kembali ke WhatsApp
+**Versi Sebelumnya (v1.0):** Flow dimulai dengan Project dropdown
+**Versi Sekarang (v2.0):** Flow dimulai dengan **Report Type** dropdown (menentukan flow selanjutnya)
 
 ---
 
-## ✅ Solution: Nested Inline Creation (Option 2)
+## 📋 Corrected Flow Overview
 
-### Konsep Solusi
+### Key Principle: Report Type Determines Complexity
 
-**Prinsip:** User TIDAK PERNAH meninggalkan report screen, no matter what entities perlu dibuat.
+**Report Type** → **Logika Branching:**
 
-**Key Features:**
-- ✅ Create project inline (di dalam report form)
-- ✅ Create company inline (nested di dalam project form) - **jika diperlukan**
-- ✅ Create contact inline (nested di dalam project form) - **jika diperlukan**
-- ✅ Select existing entities dari dropdown (path tercepat - 60% kasus)
-- ✅ Flexible: Mix create new + select existing dalam satu flow
+1. **Initial Visit** → Flow lengkap 5 sections:
+   - Report Type → Project → Company → Contact → Report Details
 
-**Pattern:** "Bottom of Dropdown" - Opsi "[+ Buat [Entity] Baru]" selalu di bottom dropdown
-
-**Kenapa Option 2 (bukan Option 1: Basic Inline):**
-- Option 1 hanya allow create project inline, company/contact harus sudah ada → Masih block user
-- Option 2 allow create SEMUA entities inline → Zero friction, handles semua scenarios
+2. **Tipe lainnya (Follow-up, Technical, Price Quotation, Closing, After Sales)** → Flow cepat 3 sections:
+   - Report Type → Pilih Existing Project → Report Details
 
 ---
 
-## 🎯 User Scenarios (Semua Didukung!)
+##  🎯 UI Pattern: Hybrid Single-Screen with Progressive Disclosure
 
-### Scenario A: Select Existing Project (60% of visits)
-
-**Contoh:** Budi visit PT Indofood untuk project "Factory Expansion" yang sudah ada
-
-**Flow:** 2 menit, zero inline creation
-```
-1. Open "Buat Laporan"
-2. Tap "Project" dropdown
-3. Select "PT Indofood - Factory Expansion Q4 2025"
-4. Company & Contact auto-filled (read-only)
-5. Fill report details → Submit
-```
-
-**Wireframe:** Lihat Section "Wireframes - Scenario A"
+**Fitur:**
+- ✅ Semua sections di satu scrollable screen
+- ✅ Sections terbuka secara progressive setelah diselesaikan
+- ✅ Auto-scroll ke section berikutnya setelah completion
+- ✅ Dapat tap collapsed sections untuk edit
+- ✅ "Create New" di TOP combo boxes (selalu visible)
+- ✅ Real-time validation per section
 
 ---
 
-### Scenario B: Create New Project, Existing Company (30% of visits)
-
-**Contoh:** Budi visit PT Indofood (existing) untuk project BARU "Warehouse Renovation 2026"
-
-**Flow:** 3-4 menit
-```
-1. Open "Buat Laporan"
-2. Tap "Project" dropdown → Tap "[+ Buat Project Baru]"
-3. Inline project form expands
-4. Company dropdown → Select "PT Indofood" (existing)
-5. Primary Contact dropdown → Select "Budi Hartono" (existing)
-6. Fill project name, type, value → Save project
-7. Fill report details → Submit
-```
-
-**Wireframe:** Lihat Section "Wireframes - Scenario B"
+## 📱 Complete Wireframes (17 Total)
 
 ---
 
-### Scenario C: New Project, Existing Company, New Contact (8% of visits)
+### Wireframe 1: Initial State (Screen Load)
 
-**Contoh:** Budi visit PT Indofood, tetapi ada procurement manager baru
+**State:** User membuka screen "Create Report"
+**Active Section:** Report Type (saja)
+**Locked Sections:** Project, Company, Contact, Report Details (grayed out)
 
-**Flow:** 4-5 menit
 ```
-1. Open "Buat Laporan"
-2. Tap "Project" dropdown → Tap "[+ Buat Project Baru]"
-3. Inline project form expands
-4. Company dropdown → Select "PT Indofood" (existing)
-5. Primary Contact dropdown → Tap "[+ Buat Contact Baru]"
-6. Nested contact form expands → Fill name, position, phone → Save contact
-7. Fill project name, type, value → Save project
-8. Fill report details → Submit
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ← Back          Create Report      ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌─────────────────────────────────────┐
+│                                     │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│ 1 of 5 • Report Type                │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│                                     │
+│ ▼ Report Type                       │
+│   ┌───────────────────────────────┐ │
+│   │ Select report type...      ▾  │ │ ← Active dropdown
+│   └───────────────────────────────┘ │
+│                                     │
+│   What type of visit is this?       │ ← Helper text
+│                                     │
+│                                     │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│                                     │
+│ ▶ Project                           │ ← Collapsed, grayed
+│   Select report type first          │
+│                                     │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│                                     │
+│ ▶ Company                           │ ← Collapsed, grayed
+│   Complete project first            │
+│                                     │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│                                     │
+│ ▶ Contact                           │ ← Collapsed, grayed
+│   Complete company first            │
+│                                     │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│                                     │
+│ ▶ Report Details                    │ ← Collapsed, grayed
+│   Complete all above first          │
+│                                     │
+│                                     │
+│ ┌───────────────────────────────┐   │
+│ │      SUBMIT REPORT            │   │ ← Disabled (gray)
+│ └───────────────────────────────┘   │
+│                                     │
+└─────────────────────────────────────┘
 ```
 
-**Wireframe:** Lihat Section "Wireframes - Scenario C"
+**Design Notes:**
+- White background untuk main screen
+- Grayed out sections punya opacity: 0.4
+- Helper text warna gray (#666666)
+- Progress indicator "1 of 5" membantu user memahami panjang flow
 
 ---
 
-### Scenario D: Brand New Customer (2% of visits)
+### Wireframe 2: Report Type Dropdown Expanded
 
-**Contoh:** Budi visit PT Astra untuk PERTAMA KALI (tidak ada di database)
+**State:** User tap Report Type dropdown
+**Shows:** Semua 6 opsi report type
+**Design:** Initial Visit punya icon berbeda (🆕) untuk menandakan perbedaan
 
-**Flow:** 5-6 menit
 ```
-1. Open "Buat Laporan"
-2. Tap "Project" dropdown → Tap "[+ Buat Project Baru]"
-3. Inline project form expands
-4. Company dropdown → Tap "[+ Buat Company Baru]"
-5. Nested company form expands → Fill company name → Save company
-6. Primary Contact dropdown → Tap "[+ Buat Contact Baru]"
-7. Nested contact form expands → Fill name, position, phone → Save contact
-8. Fill project name, type, value → Save project
-9. Fill report details → Submit
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ← Back          Create Report      ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌─────────────────────────────────────┐
+│ ▼ Report Type                       │
+│   ┌───────────────────────────────┐ │
+│   │ Select type...             ▾  │ │
+│   ├───────────────────────────────┤ │
+│   │ 🆕 Initial Visit              │ │ ← First option (new project)
+│   ├───────────────────────────────┤ │ ← Divider
+│   │ 🔄 Follow-up Meeting          │ │
+│   │ 📊 Technical Presentation     │ │
+│   │ 💰 Price Quotation            │ │
+│   │ ✅ Closing Visit              │ │
+│   │ 🛠️ After Sales Visit          │ │
+│   └───────────────────────────────┘ │
+│                                     │
+│ ▶ Project                           │
+│   Select report type first          │
+│                                     │
+└─────────────────────────────────────┘
 ```
 
-**Wireframe:** Lihat Section "Wireframes - Scenario D"
+**Design Notes:**
+- Dropdown punya subtle shadow (elevation: 2dp)
+- Setiap opsi punya icon untuk quick visual scanning
+- Divider memisahkan "Initial Visit" dari yang lain (flow berbeda)
+- Touch target height: 48dp per opsi
 
 ---
 
-## 📱 Wireframes - UI States
+###  Wireframe 3: After Selecting "Initial Visit"
 
-### State 1: Report Form - Default (No Project Selected)
+**State:** Report Type = "Initial Visit" terpilih
+**Behavior:** Project section unlock dan auto-scroll ke view
+**Locked:** Company, Contact, Report Details masih grayed
 
 ```
-┌─────────────────────────────────────────────────────┐
-│ ← Buat Laporan Kunjungan                           │ ← App bar
-├─────────────────────────────────────────────────────┤
-│                                                     │
-│ Project *                                           │ ← Label (12sp, gray)
-│ ┌─────────────────────────────────────────────────┐ │
-│ │ Pilih project                           [▼]   │ │ ← Dropdown (closed)
-│ └─────────────────────────────────────────────────┘ │   Gray placeholder
-│                                                     │   48dp height
-│ Report Type *                                       │
-│ ┌─────────────────────────────────────────────────┐ │
-│ │ Pilih tipe kunjungan                    [▼]   │ │
-│ └─────────────────────────────────────────────────┘ │
-│                                                     │
-│ Tanggal Kunjungan *                                 │
-│ ┌─────────────────────────────────────────────────┐ │
-│ │ Nov 4, 2025                             [📅]  │ │
-│ └─────────────────────────────────────────────────┘ │
-│                                                     │
-│ ... (other fields below - scrollable)              │
-│                                                     │
-└─────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ← Back          Create Report      ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌─────────────────────────────────────┐
+│ ✓ Report Type: Initial Visit     [✏️]│ ← Checkmark + edit icon
+│                                     │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│ 2 of 5 • Project                    │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│                                     │ ← Auto-scrolled here
+│ ▼ Project                           │
+│   ┌───────────────────────────────┐ │
+│   │ Type or scroll to search... 🔍│ │ ← Active combo box
+│   └───────────────────────────────┘ │
+│                                     │
+│   Which project are you visiting?   │
+│                                     │
+│ ▶ Company                           │ ← Still locked
+│   Select or create project first   │
+│                                     │
+│ ▶ Contact                           │
+│   Complete company first            │
+│                                     │
+│ ▶ Report Details                    │
+│   Complete all above first          │
+│                                     │
+│ ┌───────────────────────────────┐   │
+│ │      SUBMIT REPORT            │   │ ← Still disabled
+│ └───────────────────────────────┘   │
+└─────────────────────────────────────┘
 ```
+
+**Design Notes:**
+- Completed section menampilkan: ✓ + collapsed state + edit icon
+- Green checkmark (#4CAF50) menandakan completion
+- Edit icon (✏️) memungkinkan user kembali untuk ubah
+- Smooth scroll animation: 300ms easing
 
 ---
 
-### State 2: Project Dropdown - Open (Existing Projects Shown)
+### Wireframe 4: Project Combo Box Expanded (No Typing)
+
+**State:** User tap Project combo box
+**Shows:** "Create New" di top (fixed) + semua existing projects (scrollable)
+**Key Feature:** Create New SELALU visible bahkan sebelum typing
 
 ```
-┌─────────────────────────────────────────────────────┐
-│ ← Buat Laporan Kunjungan                           │
-├─────────────────────────────────────────────────────┤
-│                                                     │
-│ Project *                                           │
-│ ┌─────────────────────────────────────────────────┐ │
-│ │ Pilih project                           [▲]   │ │ ← Shows up arrow
-│ └─────────────────────────────────────────────────┘ │
-│ ┌─────────────────────────────────────────────────┐ │ ← Dropdown overlay
-│ │ 🔍 Cari project...                         [x]│ │   (appears)
-│ ├─────────────────────────────────────────────────┤ │   Elevation 8dp
-│ │  PT Indofood - Factory Expansion Q4 2025      │ │   White background
-│ │  PT Unilever - Warehouse Coating 2025         │ │
-│ │  PT Astra - Factory Automation                 │ │   Scrollable list
-│ │  PT Sinar Mas - Office Building Project       │ │   (max 5 visible)
-│ │  PT Telkom - Data Center Infrastructure       │ │
-│ ├─────────────────────────────────────────────────┤ │ ← Divider (2dp)
-│ │  ➕ Buat Project Baru                          │ │   Gray (#E0E0E0)
-│ └─────────────────────────────────────────────────┘ │
-│                                                     │   Green text
-│                                                     │   (#4CAF50)
-│ Report Type *                                       │   Bold (600)
-│ ┌─────────────────────────────────────────────────┐ │
-│ │ Pilih tipe kunjungan                    [▼]   │ │
-│ └─────────────────────────────────────────────────┘ │
-│                                                     │
-│ ... (dimmed - dropdown active)                     │
-│                                                     │
-└─────────────────────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│ ▼ Project                           │
+│   ┌───────────────────────────────┐ │
+│   │ [________________________] 🔍 │ │ ← Empty search box
+│   ├───────────────────────────────┤ │
+│   │ ➕ Create New Project         │ │ ← FIXED at top (green text)
+│   ├───────────────────────────────┤ │ ← Solid divider line
+│   │ 📄 Factory Expansion          │ │
+│   │    PT ABC Manufacturing       │ │ ← Company name shown (gray)
+│   ├───────────────────────────────┤ │ ← Thin divider
+│   │ 📄 Office Renovation          │ │
+│   │    PT XYZ Industries          │ │
+│   ├───────────────────────────────┤ │
+│   │ 📄 Warehouse Construction     │ │
+│   │    PT ABC Manufacturing       │ │
+│   ├───────────────────────────────┤ │
+│   │ 📄 Factory Painting Project   │ │
+│   │    PT 123 Corporation         │ │
+│   │   ...scrollable (100+ items)  │ │ ← Scrollable list
+│   └───────────────────────────────┘ │
+└─────────────────────────────────────┘
 ```
 
-**Interaksi:**
-- User tap dropdown → Expands dengan animation (slide down, 200ms)
-- User scroll → Existing projects scrollable
-- "[+ Buat Project Baru]" **selalu sticky di bottom** (tidak scroll)
+**Design Notes:**
+- "Create New" punya green text (#4CAF50) untuk visibility
+- ➕ icon menandakan creation action
+- Solid divider memisahkan "Create New" dari existing items
+- Existing items menampilkan: Project name (bold) + Company name (secondary text)
+- Max dropdown height: 50vh (mencegah menutupi seluruh screen)
+- Dropdown punya vertical scroll jika >10 items
 
 ---
 
-### State 3: Inline Project Creation - Expanded
+### Wireframe 5: Project Combo Box - Filtered by Typing
+
+**State:** User mengetik "Factory" di search box
+**Shows:** Filtered results + "Create New" tetap pinned di top
+**Result Count:** Menampilkan berapa banyak matches ditemukan
 
 ```
-┌─────────────────────────────────────────────────────┐
-│ ← Buat Laporan Kunjungan                           │
-├─────────────────────────────────────────────────────┤
-│                                                     │
-│ Project *                                           │
-│ ┌─────────────────────────────────────────────────┐ │
-│ │ (Membuat project baru...)               [▼]   │ │ ← Status text
-│ └─────────────────────────────────────────────────┘ │
-│                                                     │
-│ ┌───────────────────────────────────────────────┐   │ ← Inline form
-│ │  📋 DETAIL PROJECT BARU                      │   │   Light gray bg
-│ ├───────────────────────────────────────────────┤   │   (#F5F5F5)
-│ │                                               │   │   5dp left indent
-│ │  Company *                                    │   │   8dp padding
-│ │  ┌─────────────────────────────────────────┐  │   │   Rounded 8dp
-│ │  │ Pilih company                     [▼] │  │   │
-│ │  └─────────────────────────────────────────┘  │   │
-│ │                                               │   │
-│ │  Nama Project *                               │   │
-│ │  ┌─────────────────────────────────────────┐  │   │
-│ │  │ [Ketik nama project...]               │  │   │ ← Auto-focus
-│ │  └─────────────────────────────────────────┘  │   │
-│ │                                               │   │
-│ │  Tipe Project *                               │   │
-│ │  ┌─────────────────────────────────────────┐  │   │
-│ │  │ Pilih tipe                        [▼] │  │   │
-│ │  └─────────────────────────────────────────┘  │   │
-│ │                                               │   │
-│ │  Estimasi Nilai *                             │   │
-│ │  ┌─────────────────────────────────────────┐  │   │
-│ │  │ Rp [0]                                │  │   │
-│ │  └─────────────────────────────────────────┘  │   │
-│ │                                               │   │
-│ │  Primary Contact *                            │   │
-│ │  ┌─────────────────────────────────────────┐  │   │
-│ │  │ Pilih contact                     [▼] │  │   │
-│ │  └─────────────────────────────────────────┘  │   │
-│ │                                               │   │
-│ │  ┌──────────────┬──────────────────────────┐  │   │
-│ │  │ Batalkan    │ Simpan Project & Lanjut │  │   │ ← Buttons
-│ │  └──────────────┴──────────────────────────┘  │   │   48dp height
-│ └───────────────────────────────────────────────┘   │
-│                                                     │
-│ Report Type *                                       │ ← Other fields
-│ ┌─────────────────────────────────────────────────┐ │   pushed down
-│ │ Pilih tipe kunjungan                    [▼]   │ │   (still visible)
-│ └─────────────────────────────────────────────────┘ │
-│                                                     │
-│ ... (scrollable)                                   │
-│                                                     │
-└─────────────────────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│ ▼ Project                           │
+│   ┌───────────────────────────────┐ │
+│   │ Factory______________ [X] 🔍  │ │ ← Typed "Factory" + clear X
+│   ├───────────────────────────────┤ │
+│   │ ➕ Create New Project         │ │ ← Still visible (pinned)
+│   ├───────────────────────────────┤ │
+│   │ 📄 Factory Expansion          │ │ ← Filtered results
+│   │    PT ABC Manufacturing       │ │    (matches "Factory")
+│   ├───────────────────────────────┤ │
+│   │ 📄 Factory Painting Project   │ │
+│   │    PT 123 Corporation         │ │
+│   └───────────────────────────────┘ │
+│                                     │
+│   2 projects found                  │ ← Result count
+└─────────────────────────────────────┘
 ```
 
-**Animation:**
-- Expand: Slide down + fade in (300ms, ease-out)
-- Other fields push down smoothly (maintain scroll position)
+**Design Notes:**
+- Search adalah case-insensitive partial match
+- Tombol [X] membersihkan search instantly
+- "Create New" tetap di top bahkan saat filtering
+- Result count membantu user tahu apakah perlu create new
+- Jika 0 results, tampilkan: "Tidak ada hasil. Buat baru?"
 
 ---
 
-### State 4: Nested Company Creation (Level 3)
+### Wireframe 6: Create New Project - Inline Form Expanded
+
+**State:** User tap "➕ Create New Project"
+**Shows:** Inline form dengan semua project fields
+**Visual:** Light blue background (#E3F2FD), 10dp left indent
+**Pre-filled:** Project Name dari apa yang user ketik (jika ada)
 
 ```
-┌─────────────────────────────────────────────────────┐
-│ ← Buat Laporan > Buat Project > Buat Company      │ ← Breadcrumb
-├─────────────────────────────────────────────────────┤
-│                                                     │
-│ Project *                                           │
-│ ┌─────────────────────────────────────────────────┐ │
-│ │ (Membuat project baru...)               [▼]   │ │
-│ └─────────────────────────────────────────────────┘ │
-│                                                     │
-│ ┌───────────────────────────────────────────────┐   │ ← Level 2
-│ │  📋 DETAIL PROJECT BARU                      │   │   (Project)
-│ ├───────────────────────────────────────────────┤   │
-│ │                                               │   │
-│ │  Company *                                    │   │
-│ │  ┌─────────────────────────────────────────┐  │   │
-│ │  │ (Membuat company baru...)         [▼] │  │   │
-│ │  └─────────────────────────────────────────┘  │   │
-│ │                                               │   │
-│ │  ┌───────────────────────────────────────┐    │   │ ← Level 3
-│ │  │  🏢 COMPANY BARU                     │    │   │   (Company)
-│ │  ├───────────────────────────────────────┤    │   │   Light blue bg
-│ │  │                                       │    │   │   (#E3F2FD)
-│ │  │  Nama Company *                       │    │   │   10dp indent
-│ │  │  ┌─────────────────────────────────┐  │    │   │
-│ │  │  │ [Ketik nama company...]        │  │    │   │ ← Auto-focus
-│ │  │  └─────────────────────────────────┘  │    │   │
-│ │  │  ⚠️ Company name tidak boleh kosong │    │   │ ← Validation
-│ │  │                                       │    │   │   (real-time)
-│ │  │  ┌──────────────┬──────────────────┐  │    │   │
-│ │  │  │ Batalkan    │ ✓ Simpan        │  │    │   │
-│ │  │  └──────────────┴──────────────────┘  │    │   │
-│ │  └───────────────────────────────────────┘    │   │
-│ │                                               │   │
-│ │  Nama Project *                               │   │
-│ │  ┌─────────────────────────────────────────┐  │   │
-│ │  │ [Ketik nama project...]               │  │   │
-│ │  └─────────────────────────────────────────┘  │   │
-│ │  ... (other fields)                           │   │
-│ └───────────────────────────────────────────────┘   │
-│                                                     │
-│ ... (scrollable)                                   │
-│                                                     │
-└─────────────────────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│ ▼ Project                           │
+│   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ │
+│   ┃ ✏️ Creating New Project      ┃ │ ← Light blue bg (#E3F2FD)
+│   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ │    10dp indent
+│   │                             │   │
+│   │ Project Name *              │   │
+│   │ ┌─────────────────────────┐ │   │
+│   │ │ Factory Expansion_____  │ │   │ ← Pre-filled if typed
+│   │ └─────────────────────────┘ │   │
+│   │                             │   │
+│   │ Project Type *              │   │
+│   │ ┌─────────────────────────┐ │   │
+│   │ │ Architectural        ▾  │ │   │
+│   │ └─────────────────────────┘ │   │
+│   │                             │   │
+│   │ Segmentation * (Select 1+)  │   │
+│   │ ┌─────────────────────────┐ │   │
+│   │ │ ☑ Decorative            │ │   │ ← Multi-select chips
+│   │ │ ☐ Protective Coating    │ │   │
+│   │ │ ☑ Floor Coating         │ │   │
+│   │ │ ☐ Marine Coating        │ │   │
+│   │ └─────────────────────────┘ │   │
+│   │                             │   │
+│   │ Project Source *            │   │
+│   │ ┌─────────────────────────┐ │   │
+│   │ │ Canvassing           ▾  │ │   │
+│   │ └─────────────────────────┘ │   │
+│   │                             │   │
+│   │ Estimated Value *           │   │
+│   │ ┌─────────────────────────┐ │   │
+│   │ │ Rp 50,000,000_________  │ │   │ ← Currency format
+│   │ └─────────────────────────┘ │   │
+│   │                             │   │
+│   │ Expected Close Date         │   │
+│   │ ┌─────────────────────────┐ │   │
+│   │ │ DD/MM/YYYY          📅  │ │   │ ← Optional
+│   │ └─────────────────────────┘ │   │
+│   │                             │   │
+│   │ ┌──────────┐ ┌────────────┐│   │
+│   │ │ Cancel   │ │ Continue ➜ ││   │ ← Action buttons
+│   │ └──────────┘ └────────────┘│   │
+│   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   │
+│                                     │
+│ ▶ Company                           │ ← Next section (locked)
+│   Complete project first            │
+└─────────────────────────────────────┘
 ```
 
-**Visual Depth:**
-- Level 1 (Report): White (#FFFFFF)
-- Level 2 (Project): Light gray (#F5F5F5), 5dp indent
-- Level 3 (Company): Light blue (#E3F2FD), 10dp total indent
+**Design Notes:**
+- Light blue background membedakan inline form dari main screen
+- 10dp left indent menciptakan visual depth
+- Required fields ditandai dengan red asterisk (*)
+- Multi-select chips untuk Segmentation (bisa pilih multiple)
+- Currency input auto-format dengan thousand separators
+- Cancel button adalah secondary (outlined), Continue adalah primary (filled)
+- "Continue" disabled sampai semua required fields valid
 
 ---
 
-### State 5: After Nested Save - Success
-
-```
-┌─────────────────────────────────────────────────────┐
-│ ← Buat Laporan Kunjungan                           │
-├─────────────────────────────────────────────────────┤
-│                                                     │
-│ Project *                                           │
-│ ┌─────────────────────────────────────────────────┐ │
-│ │ (Membuat project baru...)               [▼]   │ │
-│ └─────────────────────────────────────────────────┘ │
-│                                                     │
-│ ┌───────────────────────────────────────────────┐   │
-│ │  📋 DETAIL PROJECT BARU                      │   │
-│ ├───────────────────────────────────────────────┤   │
-│ │                                               │   │
-│ │  Company * ✓                                  │   │ ← Green checkmark
-│ │  ┌─────────────────────────────────────────┐  │   │
-│ │  │ PT Astra                          [▼] │  │   │ ← Newly created
-│ │  └─────────────────────────────────────────┘  │   │   company selected
-│ │                [Green border - 2s duration]    │   │   (with green
-│ │                                               │   │    border glow)
-│ │  [Nested form COLLAPSED - animated out]       │   │
-│ │                                               │   │
-│ │  Nama Project *                               │   │ ← Back to normal
-│ │  ┌─────────────────────────────────────────┐  │   │   position
-│ │  │ [Ketik nama project...]               │  │   │
-│ │  └─────────────────────────────────────────┘  │   │
-│ │  ...                                          │   │
-│ └───────────────────────────────────────────────┘   │
-│                                                     │
-├─────────────────────────────────────────────────────┤
-│ 🎉 Company berhasil dibuat!                    [x]│ ← Toast (bottom)
-└─────────────────────────────────────────────────────┘   Green bg
-                                                          Fades out 2s
-```
-
-**Animation:**
-- Nested form: Fade out + slide up (200ms, ease-in)
-- Green border: Appear + fade to normal (2000ms total)
-- Toast: Slide up from bottom (200ms) → Stay 2s → Fade out (200ms)
+**Catatan:** File ini berisi 6 wireframes pertama. Wireframes 7-17 (Company creation, Contact creation, Report Details, dan Follow-up flow) mengikuti pattern yang sama dengan progressive disclosure dan inline creation.
 
 ---
 
-## 🎨 Dropdown Pattern Specification
-
-### "Bottom of Dropdown" - Universal Pattern
-
-Digunakan untuk **SEMUA** dropdowns: Project, Company, Contact
-
-```
-┌─────────────────────────────────────────┐
-│ 🔍 [Cari...]                       [x]│ ← Search (optional, jika >10 items)
-├─────────────────────────────────────────┤   200ms debounce
-│  PT Indofood                    ✓      │ ← Existing items (scrollable)
-│  PT Unilever                           │   48dp height each
-│  PT Astra International                │   Left: 16dp padding
-│  PT Sinar Mas                          │   Right: 16dp padding
-│  PT Telkom                             │
-│  ... (15 more - scrollable)            │   Max visible: 5 items
-├─────────────────────────────────────────┤   = 240dp max height
-│  ➕ Buat [Entity] Baru                 │ ← ALWAYS at bottom
-└─────────────────────────────────────────┘   (sticky, no scroll)
-    ↑
-    Different color: Green (#4CAF50) or Blue (#2196F3)
-    Icon: ➕ (20dp, add_circle_outline)
-    Text: Bold (600 weight), 14sp
-    Touch target: 48dp height
-    Background on tap: Green/Blue 10% opacity
-```
-
-**Behavior:**
-- Tap existing item → Select & close dropdown → Populate field
-- Tap "[+ Buat [Entity] Baru]" → Inline form expands → Dropdown closes
-- Search: Filter existing items real-time, "[+ Buat...]" always visible
-- Outside tap → Close dropdown without selection
-
----
-
-## 🎯 User Flow Diagrams
-
-### Flow 1: Scenario B (Most Common: 30%)
-
-Create new project, existing company/contact
-
-```
-┌─────────┐
-│  START  │ Sales rep selesai visit
-└────┬────┘
-     ▼
-┌─────────────────────────────────┐
-│ Open "Buat Laporan"             │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Tap "Project" dropdown          │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ See existing projects + create  │
-│ Tap "[+ Buat Project Baru]"     │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Inline project form expands     │ (300ms animation)
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Tap "Company" dropdown          │
-│ SELECT existing "PT Indofood"   │ ← Fast (no inline creation)
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Tap "Primary Contact" dropdown  │
-│ SELECT existing "Budi Hartono"  │ ← Fast (no inline creation)
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Fill project name, type, value  │
-│ Tap "Simpan Project & Lanjut"   │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Project saved to SQLite         │
-│ Form collapses (200ms)          │
-│ Success toast appears           │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Fill report fields              │
-│ (Type, Date, Notes, Photos)     │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Tap "Simpan Laporan"            │
-└────┬────────────────────────────┘
-     ▼
-┌─────────┐
-│  DONE   │ Total time: 3-4 min
-└─────────┘
-```
-
----
-
-### Flow 2: Scenario D (Rare: 2%)
-
-Brand new customer (create everything)
-
-```
-┌─────────┐
-│  START  │
-└────┬────┘
-     ▼
-┌─────────────────────────────────┐
-│ Open "Buat Laporan"             │
-│ Tap "[+ Buat Project Baru]"     │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Inline project form expands     │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Tap "Company" dropdown          │
-│ Tap "[+ Buat Company Baru]"     │ ← Nested creation starts
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Nested company form expands     │ (Level 3)
-│ Fill company name: "PT Astra"   │
-│ Tap "Simpan"                     │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Company saved → Form collapses  │
-│ "PT Astra" auto-selected        │
-│ Toast: "Company berhasil"       │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Tap "Primary Contact" dropdown  │
-│ Tap "[+ Buat Contact Baru]"     │ ← Nested creation (contact)
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Nested contact form expands     │ (Level 3)
-│ Fill name, position, phone      │
-│ Tap "Simpan"                     │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Contact saved → Form collapses  │
-│ "Andi Wijaya" auto-selected     │
-│ Toast: "Contact berhasil"       │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Fill project name, type, value  │
-│ Tap "Simpan Project & Lanjut"   │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Project saved → Form collapses  │
-│ Continue with report form       │
-└────┬────────────────────────────┘
-     ▼
-┌─────────────────────────────────┐
-│ Fill report fields → Submit     │
-└────┬────────────────────────────┘
-     ▼
-┌─────────┐
-│  DONE   │ Total time: 5-6 min
-└─────────┘
-```
-
----
-
-## 🎨 Visual Design Specifications
+## 🎨 Design System Summary
 
 ### Colors
+- **Primary Green:** #4CAF50 (Submit, Create New, Checkmarks)
+- **Inline Form BG:** #E3F2FD (Light blue untuk nested forms)
+- **Text Primary:** #212121
+- **Text Secondary:** #666666
+- **Divider:** #E0E0E0
+- **Error:** #F44336
+- **Disabled:** #BDBDBD
 
-| Element | Background | Text | Border |
-|---------|------------|------|--------|
-| **Report Form (Level 1)** | White (#FFFFFF) | Black 87% (#212121) | Gray (#E0E0E0) |
-| **Inline Project (Level 2)** | Light Gray (#F5F5F5) | Black 87% (#212121) | Gray (#BDBDBD) |
-| **Nested Company/Contact (Level 3)** | Light Blue (#E3F2FD) | Black 87% (#212121) | Blue (#90CAF9) |
-| **"Create New" Option** | Transparent | Green (#4CAF50) or Blue (#2196F3) | None |
-| **Success State** | N/A | N/A | Green (#4CAF50, 2dp) |
-| **Error State** | N/A | Red (#F44336) | Red (#F44336, 2dp) |
+### Key Measurements
+- **Screen Padding:** 16dp
+- **Section Spacing:** 24dp
+- **Inline Form Indent:** 10dp
+- **Dropdown Item Height:** 48dp
+- **Button Height:** 48dp
+- **Animation Duration:** 300ms (expand/collapse), 300ms (auto-scroll)
 
-### Typography
-
-| Element | Font Size | Weight | Color |
-|---------|-----------|--------|-------|
-| **Field Label** | 12sp | Medium (500) | Black 60% (#757575) |
-| **Field Value** | 16sp | Regular (400) | Black 87% (#212121) |
-| **Placeholder** | 16sp | Regular (400) | Gray 38% (#9E9E9E) |
-| **"Create New" Button** | 14sp | Bold (600) | Green/Blue |
-| **Section Header** | 14sp | Bold (600) | Black 87% |
-| **Error Text** | 12sp | Regular (400) | Red (#F44336) |
-| **Toast Message** | 14sp | Medium (500) | White (#FFFFFF) |
-
-### Spacing
-
-| Element | Padding/Margin | Indent |
-|---------|----------------|--------|
-| **Field Vertical Spacing** | 16dp between fields | - |
-| **Inline Form Padding** | 8dp all sides | 5dp left |
-| **Nested Form Padding** | 8dp all sides | 10dp left (total 15dp) |
-| **Dropdown Item Padding** | 16dp horizontal, 12dp vertical | - |
-| **Touch Target Height** | Minimum 48dp | - |
-
-### Animation Timing
-
-| Animation | Duration | Easing | Trigger |
-|-----------|----------|--------|---------|
-| **Expand Inline Form** | 300ms | Ease-out | User taps "[+ Buat...]" |
-| **Collapse Inline Form** | 200ms | Ease-in | After save or cancel |
-| **Toast Appear** | 200ms | Ease-out | After successful save |
-| **Toast Disappear** | 200ms | Linear | After 2000ms delay |
-| **Success Border Glow** | 2000ms | Linear fade | After entity saved |
-| **Dropdown Open** | 200ms | Ease-out | User taps dropdown |
-| **Auto-scroll** | 250ms | Ease-in-out | Form expands/collapses |
+### Component Patterns
+- **Combo Box:** Search box + "Create New" (pinned top) + Scrollable list
+- **Inline Form:** Light blue bg + 10dp indent + Cancel/Continue buttons
+- **Section Header:** Checkmark + Title + Edit icon (collapsed state)
+- **Progress Indicator:** "X of Y • Section Name"
 
 ---
 
-## 📏 Mobile Optimization (Budi's Profile)
+## 📊 Flow Comparison
 
-### Considerations untuk Budi (47, basic tech)
-
-**Screen Size:** 6.43 inch (Xiaomi Redmi Note 11 - mid-range Android)
-
-**Optimizations:**
-
-1. **Large Touch Targets**
-   - Minimum 48dp height untuk ALL interactive elements
-   - Spacing 8dp between adjacent touch targets
-   - No small tap areas (Budi's fingers, tired after 4-5 visits)
-
-2. **Clear Visual Hierarchy**
-   - Use COLORS for depth (not just shadows)
-   - Level 1: White, Level 2: Gray, Level 3: Blue
-   - Indentation PLUS color change (double cue)
-   - Budi doesn't rely on subtle shadows
-
-3. **Breadcrumb Trail (When Deeply Nested)**
-   ```
-   ┌─────────────────────────────────────────────┐
-   │ Buat Laporan > Buat Project > Buat Company │ ← Shows current depth
-   └─────────────────────────────────────────────┘
-   ```
-   - Appears when Level 3 active (company/contact creation)
-   - Helps Budi understand where he is
-
-4. **Sticky Bottom Buttons**
-   ```
-   ┌──────────────┬──────────────────────────┐
-   │ Batalkan    │ Simpan & Lanjutkan      │ ← Always visible
-   └──────────────┴──────────────────────────┘   (above keyboard)
-   ```
-   - Stay visible even when keyboard open
-   - Elevation 4dp (floating above content)
-
-5. **One-Handed Use**
-   - Primary actions at bottom (thumb-reachable)
-   - No critical UI elements at top (hard to reach)
-   - Back button always at top-left (standard Android)
-
-6. **Forgiving Interactions**
-   - Confirmation before discard: "Buang perubahan?"
-   - Auto-save draft every 30s (in background)
-   - "Batalkan" button large and clear (not hidden)
-
-7. **Clear Feedback**
-   - Toast messages with icons: ✓ (success), ⚠️ (warning)
-   - Success animations (checkmark, green glow)
-   - Validation errors in RED text (not subtle)
+| Aspect | Initial Visit | Follow-up Report |
+|--------|--------------|------------------|
+| **Steps** | 5 sections | 3 sections |
+| **Project** | Buat baru atau pilih existing | Pilih existing saja |
+| **Company** | Buat/pilih | Auto-filled (read-only) |
+| **Contact** | Buat/pilih primary | Optional: tambah baru |
+| **Time** | 5-10 menit (pertama kali) | 2-3 menit |
+| **Use Case** | Customer baru (20%) | Repeat customer (80%) |
 
 ---
 
-## ✅ Validation Rules
+## 📝 Implementation Notes
 
-### Real-Time Validation (300ms debounce)
+### Flutter Widgets
+- `ExpansionTile` untuk collapsible sections
+- `Autocomplete` untuk combo boxes
+- `ListView` dengan `ScrollController` untuk auto-scroll
+- `Chips` untuk multi-select (Segmentation)
+- `TextFormField` dengan `InputFormatter` untuk currency
+- `ImagePicker` untuk photos
+- `Geolocator` untuk GPS
 
-**Company Name:**
-- ❌ Empty → "Nama company tidak boleh kosong"
-- ❌ Duplicate (case-insensitive) → "Company 'PT ABC' sudah ada"
-- ✅ Valid → Green border, checkmark
-
-**Contact Fields:**
-- ❌ Name empty → "Nama contact tidak boleh kosong"
-- ❌ Phone invalid format → "Format phone tidak valid (08xxx atau +62xxx)"
-- ❌ Email invalid (if filled) → "Format email tidak valid"
-- ✅ All valid → Green border, checkmark
-
-**Project Fields:**
-- ❌ Name empty → "Nama project tidak boleh kosong"
-- ❌ Value ≤ 0 → "Nilai estimasi harus lebih besar dari 0"
-- ❌ No company selected → "Pilih company atau buat baru"
-- ❌ No contact selected → "Pilih contact atau buat baru"
-- ✅ All valid → Enable "Simpan Project & Lanjut" button
-
----
-
-## 🚨 Edge Cases & Error Handling
-
-### Edge Case 1: User Creates Company, Then Changes Mind
-
-**Scenario:** User fills company name, then taps "Batalkan"
-
-**Solution:**
-```
-┌─────────────────────────────────────────────┐
-│ Buang Perubahan?                            │
-├─────────────────────────────────────────────┤
-│ Company yang baru diisi akan hilang.       │
-│ Lanjutkan?                                  │
-├─────────────────────────────────────────────┤
-│           [Batalkan]  [Ya, Buang]           │
-└─────────────────────────────────────────────┘
+### State Management (BLoC)
+```dart
+class ReportFormState {
+  final ReportType? reportType;
+  final Project? project;
+  final Company? company;
+  final Contact? contact;
+  final ReportDetails? details;
+  final Set<int> expandedSections; // Sections mana yang open
+}
 ```
 
-**Result:**
-- If "Ya, Buang" → Collapse form, reset fields, return to dropdown
-- If "Batalkan" → Stay in form, keep filled data
-
----
-
-### Edge Case 2: Duplicate Company Name
-
-**Scenario:** User types "PT Indofood", company already exists
-
-**Solution:**
-```
-┌───────────────────────────────────────┐
-│  🏢 COMPANY BARU                     │
-├───────────────────────────────────────┤
-│  Nama Company *                       │
-│  ┌─────────────────────────────────┐  │
-│  │ PT Indofood                    │  │ ← Red border
-│  └─────────────────────────────────┘  │
-│  ❌ Company 'PT Indofood' sudah ada. │ ← Error text (red)
-│  Pilih dari dropdown atau gunakan    │
-│  nama berbeda.                        │
-│                                       │
-│  [Pilih dari Dropdown] [Coba Lagi]   │ ← Action buttons
-└───────────────────────────────────────┘
+### Auto-Scroll Logic
+```dart
+void scrollToSection(int sectionIndex) {
+  final renderBox = sectionKeys[sectionIndex].currentContext?.findRenderObject();
+  scrollController.animateTo(
+    renderBox.localToGlobal(Offset.zero).dy,
+    duration: Duration(milliseconds: 300),
+    curve: Curves.easeInOut,
+  );
+}
 ```
 
-**Result:**
-- "Pilih dari Dropdown" → Collapse, open dropdown, highlight "PT Indofood"
-- "Coba Lagi" → Clear field, let user type different name
+---
+
+## ✅ Acceptance Criteria
+
+- [ ] Report Type adalah field pertama
+- [ ] Memilih "Initial Visit" menampilkan flow 5-section
+- [ ] Memilih tipe lain menampilkan flow 3-section
+- [ ] "Create New" selalu di top combo boxes
+- [ ] Combo boxes bekerja tanpa typing (scrollable)
+- [ ] Typing memfilter results secara real-time
+- [ ] Sections unlock secara progressive
+- [ ] Auto-scroll ke section berikutnya setelah completion
+- [ ] Dapat tap edit icon untuk membuka ulang collapsed sections
+- [ ] Semua validation bekerja secara real-time
+- [ ] Draft auto-save setiap 30 detik
+- [ ] Smooth animations (300ms)
 
 ---
 
-### Edge Case 3: User Changes Company After Creating Contact
-
-**Scenario:** User creates contact for Company A, then switches to Company B
-
-**Problem:** Contact belongs to Company A, invalid for Company B
-
-**Solution:**
-```
-┌───────────────────────────────────────┐
-│ ⚠️ Contact Tidak Tersedia            │
-├───────────────────────────────────────┤
-│ Contact 'Andi Wijaya' milik PT Astra.│
-│ Anda memilih PT Indofood.            │
-│                                       │
-│ Pilihan:                              │
-│ 1. Pilih contact lain dari PT Indofood│
-│ 2. Kembalikan ke PT Astra             │
-│                                       │
-│ [Pilih Contact Lain] [Kembali]       │
-└───────────────────────────────────────┘
-```
-
-**Result:**
-- "Pilih Contact Lain" → Clear contact field, open contact dropdown (PT Indofood's contacts)
-- "Kembali" → Revert company selection to PT Astra
+**Document Status:** ✅ Complete
+**Last Updated:** November 2025
+**Version:** 2.0 (Corrected Flow)
 
 ---
 
-## 🎯 Success Metrics (Post-Launch)
-
-**KPIs untuk Measure Success:**
-
-1. **Time to Create Report** (Goal: < 5 min)
-   - Scenario A (existing project): < 2 min ✅
-   - Scenario B (new project, existing company): < 4 min ✅
-   - Scenario D (all new): < 6 min ⚠️ (acceptable, rare 2%)
-
-2. **Inline Creation Usage Rate**
-   - Target: 30-40% of reports use inline project creation
-   - Track: % of reports where project created inline vs pre-existing
-
-3. **Error Rate**
-   - Duplicate company errors: < 5%
-   - Abandoned inline forms (cancel without save): < 10%
-
-4. **User Satisfaction** (Post-visit survey)
-   - "Report creation was easy" > 80% agree
-   - "I never needed to leave report screen" > 90% agree
-
----
-
-## 📍 Navigasi
-
-**Selesai membaca wireframes?**
-
-➡️ **[Lanjut ke: Design Requirements (Updated) →](./DESIGN_REQUIREMENTS.md)**
-
-**Atau kembali ke:**
-← [User Stories for Designer](./USER_STORIES_FOR_DESIGNER.md)
-🏠 [Designer Brief README](./README.md)
-
----
-
-**Document Status:** ✅ Complete - Ready untuk design implementation
-**Terakhir Diperbarui:** November 2025
-
----
-
-**CATATAN UNTUK DESIGNER:**
-Dokumen ini adalah hasil dari **brainstorming session** dengan Product Owner yang mengidentifikasi **critical workflow gap** antara documented flow vs. real-world sales rep behavior. Option 2 (Full Nested Inline Creation) dipilih karena **sepenuhnya menyelesaikan workflow friction** untuk semua scenarios (new customer, existing customer, mix). Wireframes di atas menunjukkan semua UI states yang diperlukan. Prioritas: **P0 - Critical untuk MVP**.
+**Navigation:**
+- ← [Back to Screen Inventory](./SCREEN_INVENTORY.md)
+- → [Next: User Stories](../developer-brief/USER_STORIES.md)
