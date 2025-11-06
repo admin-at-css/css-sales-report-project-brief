@@ -359,7 +359,7 @@ Sehingga list contact saya tetap bersih
 
 ---
 
-### EPIC 4: Manage Projects (15 Story Points)
+### EPIC 4: Manage Projects (18 Story Points - Updated)
 
 #### US-4.1: Lihat List Projects per Company
 **Story Points:** 3
@@ -475,6 +475,72 @@ Sehingga pipeline saya tetap bersih
 
 ---
 
+#### US-4.5: Buat Report dari Project Detail (NEW)
+**Story Points:** 3
+**Priority:** P1 (High - UX Enhancement)
+
+**User Story:**
+Sebagai sales rep
+Saya ingin membuat report langsung dari Project Detail screen
+Sehingga saya tidak perlu re-select project yang sudah saya lihat
+
+**Acceptance Criteria:**
+1. Project Detail screen memiliki button "Buat Laporan untuk Project Ini"
+2. Button hanya visible untuk sales rep (Manager read-only, tidak ada button)
+3. Button posisi fixed di bottom screen, style primary (green background)
+4. Tap button → Bottom sheet muncul dengan report type picker
+5. Bottom sheet menampilkan 5 opsi report type:
+   - Follow-up Meeting (default/highlighted)
+   - Technical Presentation
+   - Price Quotation
+   - Closing Visit
+   - After Sales Visit
+6. "Initial Visit" **TIDAK tersedia** (project exists = not initial visit by definition)
+7. User select type → Create Report screen opens dengan project pre-filled
+8. Pre-filled sections (collapsed, dengan ✓ checkmark, read-only):
+   - Report Type: Selected type dari bottom sheet
+   - Project: Current project dari context
+   - Company: Auto-filled dari project
+   - Contact: Auto-filled dari project (primary contact)
+9. User langsung mulai di Report Details section (active, unlocked)
+10. Progress indicator shows: "1 of 1 • Report Details" (other sections skipped)
+11. Setelah submit → Navigate back to Project Detail screen
+12. Success toast message: "Laporan berhasil dibuat"
+13. Optional: Toast memiliki "Lihat Laporan" action untuk view created report
+
+**Technical Notes:**
+- **Deep-linking/Context Passing:**
+  - Pass `project_id`, `company_id`, `primary_contact_id` via navigation arguments
+  - Create Report screen detects entry point: `if (args.fromProjectDetail) { ... }`
+  - Pre-fill sections dan set to collapsed state dengan `is_completed = true`
+
+- **Bottom Sheet Implementation:**
+  - Material Design 3 bottom sheet component
+  - Default selection: "Follow-up Meeting" (most common use case)
+  - Single-select radio buttons untuk report type
+  - "Batal" button untuk dismiss tanpa action
+
+- **State Management:**
+  - Report Type state: `pre_filled = true, is_editable = false`
+  - Project state: `pre_filled = true, is_editable = false`
+  - Company/Contact state: `auto_filled = true, is_read_only = true`
+  - Jump to Report Details section: `active_section = 'report_details'`
+
+- **Navigation After Submit:**
+  - `Navigator.pop()` kembali ke Project Detail screen
+  - Show `SnackBar` dengan success message
+  - Optional: SnackBar action "Lihat Laporan" → Navigate to Report Detail screen
+
+- **Validation:**
+  - Tidak boleh show "Initial Visit" option untuk existing project
+  - Validation rule: `if (project_id != null) { exclude_initial_visit = true }`
+
+**Dependencies:**
+- US-4.1 (View project detail)
+- US-5.1 (Create report - base functionality)
+
+---
+
 ### EPIC 5: Create Report (38 Story Points - Updated)
 
 #### US-5.1: Buat Visit Report
@@ -576,9 +642,17 @@ Sehingga manager saya dapat melacak aktivitas saya
   - Jika user abandon inline creation → Draft entities disimpan, linked ke draft report
   - Dropdown pattern: "➕ Create New [Entity]" selalu di TOP (FIXED position), green text, solid divider
   - Progressive disclosure dengan ExpansionTile, auto-scroll dengan ScrollController
-- **UX specifications:** Lihat designer-brief/NESTED_INLINE_CREATION_WIREFRAMES.md (17 wireframes)
+- **Context-aware navigation (Entry Point C - from Project Detail):**
+  - Detect entry point: Check navigation arguments untuk `fromProjectDetail` flag
+  - Jika true: Pre-fill Report Type, Project, Company, Contact dari context
+  - Set pre-filled sections ke collapsed state dengan ✓ checkmark (read-only)
+  - Jump langsung ke Report Details section (skip earlier sections)
+  - Progress indicator: "1 of 1 • Report Details" (hide skipped sections)
+  - After submit: `Navigator.pop()` kembali ke Project Detail screen + success toast
+  - Bottom sheet NOT shown di Create Report screen (already selected from Project Detail)
+- **UX specifications:** Lihat designer-brief/NESTED_INLINE_CREATION_WIREFRAMES.md (22 wireframes - includes Entry Point C)
 
-**Dependencies:** US-4.2 (Create project), US-3.2 (Create contact)
+**Dependencies:** US-4.2 (Create project), US-3.2 (Create contact), US-4.5 (Create from Project Detail)
 
 ---
 

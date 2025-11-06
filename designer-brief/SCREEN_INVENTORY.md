@@ -217,7 +217,7 @@ Ini adalah 5 screens yang HARUS di-design di Week 1 untuk review:
   - Empty, loaded
 
 #### 14. Project Detail
-- **User Story:** US-4.1
+- **User Story:** US-4.1, US-4.5 (Create Report from Project)
 - **User:** Sales rep, Manager
 - **Key Elements:**
   - Top App Bar: Project name + edit icon + back
@@ -234,6 +234,24 @@ Ini adalah 5 screens yang HARUS di-design di Week 1 untuk review:
     - Created date
   - Value change log (accordion, collapsed by default):
     - History of value changes (old value → new value, date, changed by)
+  - **Button "Buat Laporan untuk Project Ini"** (sales rep only):
+    - Fixed button at bottom of screen
+    - Primary style (green background)
+    - Visible for sales rep only (Manager has read-only access)
+- **States:**
+  - Default (button visible)
+  - Bottom sheet open (report type picker visible)
+  - After report created (success toast visible)
+- **Interactions:**
+  - Tap "Buat Laporan" button → Bottom sheet muncul dengan report type picker
+  - Bottom sheet menampilkan 5 opsi (NO "Initial Visit"):
+    - Follow-up Meeting (default/highlighted)
+    - Technical Presentation
+    - Price Quotation
+    - Closing Visit
+    - After Sales Visit
+  - Select type → Create Report screen opens dengan project pre-filled
+  - After submit report → Navigate back to Project Detail screen + success toast
 
 #### 15. Create Project Form
 - **User Story:** US-4.2
@@ -309,6 +327,19 @@ Ini adalah 5 screens yang HARUS di-design di Week 1 untuk review:
     - **Section 3: Report Details**
       - Visit Date, Attendees, Notes, Next Action, Outcome, Photos, GPS
 
+  - **ENTRY POINT C: From Project Detail Screen (NEW - US-4.5):**
+    - User taps "Buat Laporan untuk Project Ini" dari Project Detail screen
+    - Bottom sheet appears dengan report type picker (5 options, NO "Initial Visit")
+    - User selects report type → Create Report screen opens dengan:
+      - **Section 1: Report Type** - Pre-filled (collapsed, ✓ checkmark, read-only)
+      - **Section 2: Project** - Pre-filled dari context (collapsed, ✓ checkmark, read-only)
+      - **Section 3: Company** - Auto-filled dari project (grayed, read-only)
+      - **Section 4: Contact** - Auto-filled dari project (grayed, read-only)
+      - **Section 5: Report Details** - ACTIVE (user starts here immediately)
+    - Progress indicator: "1 of 1 • Report Details" (other sections skipped)
+    - After submit → Navigate back to Project Detail screen + success toast
+    - Toast message: "Laporan berhasil dibuat" + optional "Lihat Laporan" action
+
   - **Progressive Disclosure Pattern:**
     - Sections unlock satu-per-satu setelah completion
     - Auto-scroll (300ms animation) ke section berikutnya
@@ -324,7 +355,9 @@ Ini adalah 5 screens yang HARUS di-design di Week 1 untuk review:
 
   - Bottom: "SUBMIT REPORT" button (disabled sampai semua complete)
 
-- **States (17 wireframes total - see NESTED_INLINE_CREATION_WIREFRAMES.md):**
+- **States (22 wireframes total - see NESTED_INLINE_CREATION_WIREFRAMES.md):**
+
+  **Entry Point A & B (Standard flow): 17 wireframes**
   1. Initial load (Report Type active, lainnya locked)
   2. Report Type dropdown expanded
   3. After Initial Visit selected (Project unlocks)
@@ -342,6 +375,13 @@ Ini adalah 5 screens yang HARUS di-design di Week 1 untuk review:
   15. Report Details with photos & GPS
   16. Follow-up flow (3 sections only)
   17. Follow-up after project selected
+
+  **Entry Point C (From Project Detail): 5 new wireframes**
+  18. Project Detail screen with "Buat Laporan" button
+  19. Bottom sheet report type picker (5 options, default: Follow-up)
+  20. Create Report opened dengan pre-filled sections (collapsed)
+  21. Report Details section active (user starts typing here)
+  22. Success + navigate back to Project Detail
 
 - **Interactions:**
   - Tap Report Type → Dropdown expands, show 6 options

@@ -16,10 +16,10 @@ Sales reps saat ini pakai WhatsApp untuk laporan (tidak terstruktur, sering hila
 
 ## 🎯 Design Deliverables
 
-### 1. High-Fidelity Mockups (31 Screens)
+### 1. High-Fidelity Mockups (33 Screens - Updated)
 
 **Format:**
-- Figma file dengan 31 frames
+- Figma file dengan 33 frames (+2 untuk Entry Point C: Create Report from Project Detail)
 - Portrait orientation only
 - Screen size: 360 × 800 dp (standard Android)
 - Light mode only (dark mode di Phase 2)
@@ -167,6 +167,17 @@ Fill visit date, attendees, notes → Add photos → Submit →
 Success
 ```
 **Why:** Tests quick flow untuk repeat customers (80% use case - 2-3 menit)
+
+**Alternatif - Flow 1C: Create Report from Project Detail (NEW - Entry Point C)**
+```
+Home → Projects List → Select Project →
+Project Detail Screen → Tap "Buat Laporan untuk Project Ini" →
+Bottom Sheet (Report Type Picker) → Select "Follow-up Meeting" →
+Create Report Screen (project pre-filled, sections collapsed) →
+Report Details active (user starts here immediately) →
+Fill details → Submit → Back to Project Detail + success toast
+```
+**Why:** Tests context-aware navigation + pre-fill behavior + bottom sheet pattern (NEW feature - US-4.5)
 
 #### **Flow 2: Create Company**
 ```
@@ -348,7 +359,7 @@ Create a Figma page "Icons Used" dengan list:
 ### Checklist:
 
 **Screens:**
-- [ ] All 31 screens designed (hi-fidelity)
+- [ ] All 33 screens designed (hi-fidelity)
 - [ ] All screens use brand colors from CSS Logo Guidelines
 - [ ] All screens use Material Design 3 components
 - [ ] All text is placeholder Bahasa Indonesia (realistic content)
@@ -413,7 +424,7 @@ Create a Figma page "Icons Used" dengan list:
    - Portrait only for MVP
 
 8. **Create 100+ screens**
-   - 31 screens only (including states) - don't overcomplicate
+   - 33 screens only (including states + Entry Point C) - don't overcomplicate
 
 ### ✅ DO:
 1. **Follow Material Design 3 guidelines**
@@ -445,7 +456,7 @@ Create a Figma page "Icons Used" dengan list:
 - **Figma** (desktop app or web)
 - **CSS Logo Guidelines.pdf** (in this folder)
 - **NESTED_INLINE_CREATION_WIREFRAMES.md** (complete specifications untuk Create Report flow)
-- **SCREEN_INVENTORY.md** (list semua 31 screens dengan details)
+- **SCREEN_INVENTORY.md** (list semua 33 screens dengan details - includes Entry Point C)
 - **Material Design 3 Figma Kit** (optional but helpful)
   - Download: https://www.figma.com/community/file/1035203688168086460
 

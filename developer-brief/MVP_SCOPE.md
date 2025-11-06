@@ -311,7 +311,7 @@ Future<void> syncCompanyUpdate(Company local) async {
 
 ---
 
-### EPIC 4: Manage Projects (11 Story Points)
+### EPIC 4: Manage Projects (14 Story Points - Updated)
 
 #### ✅ US-4.1: View List of Projects per Company
 **Story Points:** 3
@@ -406,6 +406,32 @@ Future<void> updateProjectValue(String projectId, int newValueCents) async {
 - ✅ Edit project value → Log entry created
 - ✅ Edit status Active → Won → Log created
 - ✅ Works offline, syncs later
+
+---
+
+#### ✅ US-4.5: Create Report from Project Detail (NEW)
+**Story Points:** 3
+**Priority:** P1 (High - UX Enhancement)
+
+**Included:**
+- Button "Buat Laporan untuk Project Ini" di Project Detail screen (sales rep only)
+- Bottom sheet report type picker (5 options, NO "Initial Visit")
+- Default selection: "Follow-up Meeting" (most common)
+- Pre-fill Report Type, Project, Company, Contact dari context
+- Jump langsung ke Report Details section
+- Navigate back to Project Detail after submit + success toast
+
+**Why Include in MVP:**
+- Improves UX significantly (no need to re-select project)
+- Small effort (+3 SP) for big impact
+- Matches natural workflow: view project → create report
+
+**Acceptance Tests:**
+- ✅ Tap "Buat Laporan" dari Project Detail → Bottom sheet muncul
+- ✅ Select "Follow-up Meeting" → Create Report screen dengan project pre-filled
+- ✅ Sections collapsed dengan ✓ checkmark (read-only)
+- ✅ User starts at Report Details section immediately
+- ✅ Submit → Navigate back to Project Detail + success toast
 
 ---
 
@@ -790,17 +816,17 @@ Future<void> onAppStartup() async {
 | EPIC 1: Authentication | 2/2 | 0 | 5 | 0 |
 | EPIC 2: Companies | 3/4 | 1 | 10 | 2 |
 | EPIC 3: Contacts | 3/4 | 1 | 10 | 2 |
-| EPIC 4: Projects | 3/4 | 1 | 11 | 1 |
+| EPIC 4: Projects | 4/5 | 1 | **14** (+3 for US-4.5) | 1 |
 | EPIC 5: Reports | 2/4 | 2 | **34** (+18 nested inline) | 4 |
 | EPIC 6: Dashboard | 2/3 | 1 | 10 | 5 |
 | EPIC 7: Offline/Sync | 3/4 | 1 | 15 | 2 |
 | EPIC 8: Profile | 0/2 | 2 | 0 | 5 |
-| **TOTAL** | **18/27** | **9** | **95** (+18) | **21** |
+| **TOTAL** | **19/28** | **9** | **98** (+18+3) | **21** |
 
-**MVP = 95 story points (+18 untuk nested inline creation)**
-**Deferred = 21 story points (21%)**
+**MVP = 98 story points (+18 untuk nested inline creation, +3 untuk create from project detail)**
+**Deferred = 21 story points (18%)**
 
-Note: +18 story points ditambahkan ke US-5.1 untuk **Progressive Disclosure + Nested Inline Creation**:
+**Note 1: +18 SP untuk Progressive Disclosure + Nested Inline Creation (US-5.1):**
 - **Report Type First:** Determines flow complexity (Initial Visit = 5 sections vs Follow-up = 3 sections)
 - **Branching Logic:** Optimizes untuk 80% use case (repeat customers: 2-3 menit vs new customers: 5-10 menit)
 - **Nested Inline Creation:** Kemampuan create project/company/contact inline saat buat report (Initial Visit only)
@@ -808,6 +834,14 @@ Note: +18 story points ditambahkan ke US-5.1 untuk **Progressive Disclosure + Ne
 - **Progressive Disclosure:** Sections unlock dan auto-scroll setelah completion, dengan edit capability
 
 Ini critical untuk match real-world workflow: sales reps naturally berpikir "Apa tipe kunjungan ini?" SEBELUM pilih project. Initial Visit = new opportunity (perlu create entities), Follow-up = existing project (quick entry).
+
+**Note 2: +3 SP untuk Create Report from Project Detail (US-4.5):**
+- **Context-Aware Navigation:** User dapat create report langsung dari Project Detail screen
+- **Bottom Sheet Picker:** Quick report type selection (5 options, NO "Initial Visit")
+- **Pre-fill & Jump:** Pre-fill Report Type/Project/Company/Contact, jump to Report Details immediately
+- **Return Navigation:** After submit, navigate back to Project Detail + success toast
+
+Improves UX significantly dengan small effort - matches natural workflow: view project → create report.
 
 ### What Makes This MVP?
 

@@ -335,7 +335,281 @@
 
 ---
 
-**Catatan:** File ini berisi 6 wireframes pertama. Wireframes 7-17 (Company creation, Contact creation, Report Details, dan Follow-up flow) mengikuti pattern yang sama dengan progressive disclosure dan inline creation.
+**Catatan:** Wireframes 7-17 (Company creation, Contact creation, Report Details, dan Follow-up flow) mengikuti pattern yang sama dengan progressive disclosure dan inline creation.
+
+---
+
+## 📱 Entry Point C: Create Report from Project Detail (Wireframes 18-22)
+
+### Wireframe 18: Project Detail Screen with "Buat Laporan" Button
+
+**State:** User viewing Project Detail screen
+**Shows:** Project information + "Buat Laporan untuk Project Ini" button
+**User:** Sales rep only (Manager doesn't see this button)
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ← Back    Factory Expansion    ✏️  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌─────────────────────────────────────┐
+│ Project Information                 │
+│                                     │
+│ Project Name                        │
+│ Factory Expansion Q4 2025           │
+│                                     │
+│ Type: Architectural                 │
+│ Segmentation: [Decorative][Floor]   │
+│ Status: [Active] ← Green badge      │
+│                                     │
+│ Estimated Value                     │
+│ Rp 50,000,000                       │
+│                                     │
+│ Expected Close Date                 │
+│ 31/12/2025                          │
+│                                     │
+│ Primary Contact                     │
+│ Budi Santoso - Project Manager →   │
+│                                     │
+│ Company                             │
+│ PT ABC Manufacturing →              │
+│                                     │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│                                     │
+│ ▼ Value Change Log                  │
+│                                     │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│                                     │
+│ ┌───────────────────────────────┐   │
+│ │  BUAT LAPORAN UNTUK           │   │ ← Fixed button
+│ │  PROJECT INI                  │   │    Green bg (#4CAF50)
+│ └───────────────────────────────┘   │    48dp height
+│                                     │
+└─────────────────────────────────────┘
+```
+
+**Design Notes:**
+- Button fixed di bottom of screen (always visible saat scroll)
+- Primary button style (green background, white text)
+- Only visible untuk sales rep role
+- Manager view: Tidak ada button ini (read-only access)
+
+---
+
+### Wireframe 19: Bottom Sheet - Report Type Picker
+
+**State:** User tapped "Buat Laporan" button
+**Shows:** Bottom sheet dengan 5 report type options (NO "Initial Visit")
+**Default Selection:** "Follow-up Meeting" (highlighted)
+
+```
+┌─────────────────────────────────────┐
+│                                     │
+│ (Project Detail screen dimmed)      │
+│                                     │
+└─────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                     ┃ ← Bottom sheet
+┃ Jenis Laporan?                      ┃    slides up
+┃                                     ┃    from bottom
+┃ ┌─────────────────────────────────┐ ┃
+┃ │ ● 🔄 Follow-up Meeting          │ ┃ ← Default
+┃ │                                 │ ┃    (radio selected)
+┃ ├─────────────────────────────────┤ ┃    Green highlight
+┃ │ ○ 📊 Technical Presentation     │ ┃
+┃ ├─────────────────────────────────┤ ┃
+┃ │ ○ 💰 Price Quotation            │ ┃
+┃ ├─────────────────────────────────┤ ┃
+┃ │ ○ ✅ Closing Visit              │ ┃
+┃ ├─────────────────────────────────┤ ┃
+┃ │ ○ 🛠️ After Sales Visit          │ ┃
+┃ └─────────────────────────────────┘ ┃
+┃                                     ┃
+┃ Catatan: "Initial Visit" tidak      ┃ ← Helper text
+┃ tersedia (project sudah ada)        ┃
+┃                                     ┃
+┃ ┌──────────┐         ┌────────────┐ ┃
+┃ │  Batal   │         │  Lanjut ➜ │ ┃
+┃ └──────────┘         └────────────┘ ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+```
+
+**Design Notes:**
+- Material Design 3 bottom sheet component
+- Background dimmed (scrim) dengan opacity 0.4
+- Radio buttons untuk single selection
+- "Follow-up Meeting" pre-selected (most common use case)
+- "Initial Visit" NOT available (project exists = not initial visit)
+- Helper text menjelaskan kenapa "Initial Visit" tidak ada
+- "Batal" button dismisses bottom sheet
+- "Lanjut" button opens Create Report screen dengan pre-fill
+
+---
+
+### Wireframe 20: Create Report - Pre-filled Sections (Collapsed)
+
+**State:** User selected report type dari bottom sheet
+**Shows:** Create Report screen dengan Report Type, Project, Company, Contact pre-filled dan collapsed
+**Active Section:** Report Details (user starts here)
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ← Back     Buat Laporan Kunjungan  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌─────────────────────────────────────┐
+│                                     │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│ 1 of 1 • Report Details             │ ← Progress indicator
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │    (skipped sections
+│                                     │     not shown)
+│ ✓ Report Type: Follow-up Meeting [✏️]│ ← Collapsed, read-only
+│   (dari Project Detail context)     │    Green checkmark
+│                                     │
+│ ✓ Project: Factory Expansion Q4  [✏️]│ ← Collapsed, read-only
+│   PT ABC Manufacturing              │    Pre-filled from context
+│                                     │
+│ ✓ Company: PT ABC Manufacturing  [✏️]│ ← Collapsed, read-only
+│   (auto-filled dari project)        │    Grayed out
+│                                     │
+│ ✓ Contact: Budi Santoso          [✏️]│ ← Collapsed, read-only
+│   (primary contact dari project)    │    Grayed out
+│                                     │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│ ▼ Report Details                    │ ← ACTIVE section
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │    (user starts here)
+│                                     │
+│ Visit Date *                        │
+│ ┌───────────────────────────────┐   │
+│ │ 06/11/2025 (Today)        📅  │   │ ← Auto-filled today
+│ └───────────────────────────────┘   │
+│                                     │
+│ Attendees * (dari PT ABC Mfg)       │
+│ ┌───────────────────────────────┐   │
+│ │ [Pilih attendees...]       ▾  │   │ ← Multi-select
+│ └───────────────────────────────┘   │    dropdown
+│                                     │
+│ Notes (optional)                    │
+│ ┌───────────────────────────────┐   │
+│ │                               │   │
+│ │                               │   │
+│ └───────────────────────────────┘   │
+│   ... (scrollable)                  │
+│                                     │
+└─────────────────────────────────────┘
+```
+
+**Design Notes:**
+- Collapsed sections menampilkan summary + ✓ checkmark + edit icon ✏️
+- Pre-filled sections are read-only (cannot change without tapping edit)
+- Progress indicator shows "1 of 1" (other sections skipped/hidden)
+- User immediately starts filling Report Details
+- Edit icons allow reopening sections if needed (edge case)
+
+---
+
+### Wireframe 21: Report Details Section - Active (User Filling Form)
+
+**State:** User filling Report Details section
+**Shows:** Expanded form fields untuk visit details, attendees, notes, photos, GPS
+
+```
+┌─────────────────────────────────────┐
+│ (Collapsed sections above, scrolled │
+│  out of view)                       │
+│                                     │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│ ▼ Report Details                    │
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│                                     │
+│ Visit Date *                        │
+│ ┌───────────────────────────────┐   │
+│ │ 06/11/2025 (Today)        📅  │   │
+│ └───────────────────────────────┘   │
+│                                     │
+│ Attendees * (Min 1)                 │
+│ ┌───────────────────────────────┐   │
+│ │ ☑ Budi Santoso (Primary)      │   │ ← Primary contact
+│ │ ☑ Siti Rahayu                 │   │    pre-selected
+│ │ ☐ Ahmad Wijaya                │   │
+│ └───────────────────────────────┘   │
+│                                     │
+│ Notes (optional, max 5000 char)     │
+│ ┌───────────────────────────────┐   │
+│ │ Discussed technical specs__   │   │
+│ │ for floor coating. Client     │   │
+│ │ interested in water-based...  │   │
+│ └───────────────────────────────┘   │
+│                                     │
+│ Next Action (optional)              │
+│ ┌───────────────────────────────┐   │
+│ │ Send quotation by Friday___   │   │
+│ └───────────────────────────────┘   │
+│                                     │
+│ Outcome (optional)                  │
+│ ┌───────────────────────────────┐   │
+│ │ Positive                   ▾  │   │
+│ └───────────────────────────────┘   │
+│                                     │
+│ Photos (optional, max 10)           │
+│ ┌──────┐ ┌──────┐ ┌──────┐        │
+│ │ [+]  │ │      │ │      │         │ ← Add photo
+│ └──────┘ └──────┘ └──────┘         │    button
+│                                     │
+│ GPS Location                        │
+│ ● Capturing... (10s timeout)        │ ← Auto-capture
+│                                     │
+│ ┌───────────────────────────────┐   │
+│ │      SUBMIT REPORT            │   │ ← Enabled when
+│ └───────────────────────────────┘   │    required fields
+│                                     │    filled
+└─────────────────────────────────────┘
+```
+
+**Design Notes:**
+- Primary contact (Budi Santoso) pre-selected in Attendees
+- Visit Date defaults to today
+- All Report Details fields same as standard flow
+- GPS auto-capture in background (non-blocking)
+- Submit button enabled when: Visit Date + Attendees (min 1) filled
+
+---
+
+### Wireframe 22: Success + Navigate Back to Project Detail
+
+**State:** Report successfully submitted
+**Shows:** Brief success feedback + auto-navigate back to Project Detail screen
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ← Back    Factory Expansion    ✏️  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌─────────────────────────────────────┐
+│ Project Information                 │
+│                                     │
+│ Project Name                        │
+│ Factory Expansion Q4 2025           │
+│                                     │
+│ ... (project details)               │
+│                                     │
+│ ┌───────────────────────────────┐   │
+│ │  BUAT LAPORAN UNTUK           │   │
+│ │  PROJECT INI                  │   │
+│ └───────────────────────────────┘   │
+│                                     │
+└─────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ✓ Laporan berhasil dibuat           ┃ ← Snackbar
+┃                                     ┃    (green bg)
+┃         [Lihat Laporan →]           ┃ ← Optional action
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+```
+
+**Design Notes:**
+- Immediately navigate back to Project Detail screen after submit
+- Show success snackbar (green background, ✓ checkmark)
+- Message: "Laporan berhasil dibuat"
+- Optional: "Lihat Laporan" action button untuk navigate to Report Detail screen
+- Snackbar auto-dismiss after 3 seconds
+- Report appears in "Reports for this Project" list (if viewed)
 
 ---
 

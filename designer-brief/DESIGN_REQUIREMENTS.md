@@ -386,6 +386,166 @@ During: [⟳ Menyimpan...]  ← Spinner + text, button disabled
 
 ---
 
+## 📋 Part 2.6: Bottom Sheet Pattern (BARU - Entry Point C)
+
+### Use Case
+Bottom sheet digunakan untuk Report Type Picker saat user membuat report dari Project Detail screen (Entry Point C - US-4.5).
+
+### Component Specifications
+
+#### **Bottom Sheet Container**
+```
+Material Design 3 Bottom Sheet (Modal)
+
+Dimensions:
+- Width: Full screen width (360dp)
+- Height: Auto (wrap content), max 70vh
+- Border radius (top corners): 16dp
+- Elevation: 8dp
+- Background: White (#FFFFFF)
+- Scrim (background dimmer): Black dengan opacity 40%
+```
+
+#### **Header**
+```
+Title: "Jenis Laporan?"
+- Typography: Title Large (22sp, medium weight)
+- Color: neutral-900 (#212121)
+- Padding: 24dp top, 24dp horizontal, 16dp bottom
+- Alignment: Left
+```
+
+#### **Content: Report Type Options (5 items)**
+```
+List dengan radio buttons:
+1. ● 🔄 Follow-up Meeting [DEFAULT - pre-selected]
+2. ○ 📊 Technical Presentation
+3. ○ 💰 Price Quotation
+4. ○ ✅ Closing Visit
+5. ○ 🛠️ After Sales Visit
+
+Item Specifications:
+- Height: 56dp per item
+- Padding: 16dp horizontal, 12dp vertical
+- Typography: Body Large (16sp)
+- Color: neutral-900
+- Radio button: Primary color (#4CAF50) when selected
+- Icon: 24dp, color: neutral-600
+- Hover state: Light gray background (#F5F5F5)
+- Selected state: Light green background (#E8F5E9)
+
+Divider:
+- 1dp height, color: neutral-200 (#E0E0E0)
+- Between each item
+```
+
+#### **Helper Text**
+```
+Text: "Catatan: \"Initial Visit\" tidak tersedia (project sudah ada)"
+
+- Typography: Body Medium (14sp)
+- Color: neutral-600 (#666666)
+- Padding: 16dp all sides
+- Background: Light blue (#E3F2FD)
+- Border radius: 8dp
+- Margin: 16dp horizontal, 8dp vertical
+```
+
+#### **Action Buttons**
+```
+Layout: Row dengan 2 buttons, equal width
+
+Button 1 (Batal):
+- Style: Outlined button (secondary)
+- Width: 48% (with 4% gap)
+- Height: 48dp
+- Text: "Batal"
+- Border: 1dp, neutral-300
+- Text color: neutral-700
+
+Button 2 (Lanjut):
+- Style: Filled button (primary)
+- Width: 48%
+- Height: 48dp
+- Text: "Lanjut ➜"
+- Background: Primary green (#4CAF50)
+- Text color: White (#FFFFFF)
+- Disabled state: Gray (#BDBDBD) when no selection
+
+Padding: 16dp horizontal, 24dp bottom
+```
+
+### States
+
+**State 1: Initial (Default)**
+- "Follow-up Meeting" pre-selected (radio filled)
+- "Lanjut" button enabled (green)
+- Scrim visible, bottom sheet slides up dari bottom
+
+**State 2: User Selecting Different Type**
+- Radio button changes to selected item
+- Light green background on selected item
+- "Lanjut" button remains enabled
+
+**State 3: Dismissed**
+- User taps "Batal" OR taps scrim outside bottom sheet
+- Bottom sheet slides down, fades out
+- Scrim fades out
+- Returns to Project Detail screen
+
+**State 4: Confirmed**
+- User taps "Lanjut"
+- Bottom sheet dismisses (slide down animation)
+- Navigate to Create Report screen dengan pre-fill
+
+### Animation Specifications
+
+**Slide Up (Open):**
+- Duration: 300ms
+- Curve: Ease-out (deceleration)
+- Starting position: Off-screen bottom
+- Ending position: Anchored to bottom
+
+**Slide Down (Close):**
+- Duration: 250ms
+- Curve: Ease-in (acceleration)
+- Starting position: Visible
+- Ending position: Off-screen bottom
+
+**Scrim Fade:**
+- Fade in: 200ms (concurrent with slide up)
+- Fade out: 150ms (concurrent with slide down)
+
+### Accessibility
+
+- **Screen reader:** Announce "Dialog: Pilih jenis laporan. 5 opsi tersedia. Follow-up Meeting dipilih."
+- **Focus:** Trap focus within bottom sheet (cannot tab to elements behind scrim)
+- **Dismiss:** ESC key dismisses bottom sheet (keyboard accessibility)
+- **Touch targets:** All radio button areas are 56dp height (exceeds 48dp minimum)
+
+### Implementation Notes
+
+**Flutter Widget:**
+```dart
+showModalBottomSheet<ReportType>(
+  context: context,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+  ),
+  builder: (context) => ReportTypePicker(
+    defaultType: ReportType.followUp,
+    excludeInitialVisit: true, // Project exists = no initial visit
+  ),
+);
+```
+
+**Behavior:**
+- Tidak bisa swipe-to-dismiss (must tap Batal or select + Lanjut)
+- Tapping scrim outside dismisses bottom sheet (same as Batal)
+- Auto-focus on "Lanjut" button for keyboard navigation
+
+---
+
 ## ♿ Part 3: Accessibility Requirements
 
 ### Color Contrast (WCAG AA Minimum)
