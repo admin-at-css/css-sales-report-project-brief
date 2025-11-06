@@ -115,6 +115,8 @@ Sehingga saya dapat mengakses app secara aman
 - Handle network errors dengan baik dengan opsi retry
 - Token expires setelah 7 hari, auto-refresh sebelum expiry
 
+**Wireframes:** [Login & Splash Screens](../designer-brief/WIREFRAMES_AUTHENTICATION.md)
+
 **Dependencies:** None (fitur pertama untuk diimplementasi)
 
 ---
@@ -140,6 +142,8 @@ Sehingga akun saya aman jika orang lain menggunakan phone saya
 - Hapus flutter_secure_storage
 - Pertahankan Drift database
 - Logout harus bekerja offline
+
+**Wireframes:** [Profile & Settings Screens](../designer-brief/WIREFRAMES_SYNC_SETTINGS.md)
 
 **Dependencies:** US-1.1 (Login)
 
@@ -172,6 +176,8 @@ Sehingga saya dapat mengelola customers saya
 - Filter berdasarkan `created_by = current_user.id` (kecuali managers)
 - Gunakan indexed query untuk performance
 
+**Wireframes:** [Companies List & Management](../designer-brief/WIREFRAMES_COMPANIES.md)
+
 **Dependencies:** US-1.1 (Login diperlukan)
 
 ---
@@ -200,6 +206,8 @@ Sehingga saya dapat melacak customers baru
 - Generate UUID di client-side
 - Handle sync conflict jika duplicate ditemukan di server
 
+**Wireframes:** [Create Company Form](../designer-brief/WIREFRAMES_COMPANIES.md)
+
 **Dependencies:** US-2.1 (View list)
 
 ---
@@ -225,6 +233,8 @@ Sehingga saya dapat memperbaiki typos atau memperbarui nama resmi
 - Update timestamp `updated_at` secara otomatis
 - Conflict resolution via Last-Write-Wins (MVP)
 
+**Wireframes:** [Edit Company Form](../designer-brief/WIREFRAMES_COMPANIES.md)
+
 **Dependencies:** US-2.2 (Create company)
 
 ---
@@ -249,6 +259,8 @@ Sehingga list company saya tetap bersih
 - Soft delete: `deleted_at = NOW()`
 - Validasi tidak ada active projects: `SELECT COUNT(*) FROM projects WHERE company_id = ? AND deleted_at IS NULL`
 - Database constraint: ON DELETE RESTRICT
+
+**Wireframes:** [Company Detail & Delete Confirmation](../designer-brief/WIREFRAMES_COMPANIES.md)
 
 **Dependencies:** US-2.2 (Create company)
 
@@ -277,6 +289,8 @@ Sehingga saya tahu siapa yang harus dihubungi
 **Technical Notes:**
 - Query: `SELECT * FROM contacts WHERE company_id = ? AND deleted_at IS NULL`
 - Offline-first (Drift query)
+
+**Wireframes:** [Contacts List & Management](../designer-brief/WIREFRAMES_CONTACTS.md)
 
 **Dependencies:** US-2.1 (View companies)
 
@@ -308,6 +322,8 @@ Sehingga saya dapat melacak project stakeholders
 - Validasi phone regex: `^(08[0-9]{8,11}|\\+62[0-9]{9,12})$`
 - Validasi email: standard email regex jika diisi
 
+**Wireframes:** [Create Contact Form](../designer-brief/WIREFRAMES_CONTACTS.md)
+
 **Dependencies:** US-2.2 (Create company)
 
 ---
@@ -332,6 +348,8 @@ Sehingga data contact tetap up-to-date
 - Cek permission `created_by`
 - Update timestamp `updated_at`
 
+**Wireframes:** [Edit Contact Form](../designer-brief/WIREFRAMES_CONTACTS.md)
+
 **Dependencies:** US-3.2 (Create contact)
 
 ---
@@ -354,6 +372,8 @@ Sehingga list contact saya tetap bersih
 
 **Technical Notes:**
 - Validasi: `NOT IN (SELECT primary_contact_id FROM projects WHERE deleted_at IS NULL)`
+
+**Wireframes:** [Contact Detail & Delete Confirmation](../designer-brief/WIREFRAMES_CONTACTS.md)
 
 **Dependencies:** US-3.2 (Create contact)
 
@@ -383,6 +403,8 @@ Sehingga saya dapat melacak sales pipeline saya
 - Format estimated value: `Rp 50.000.000` (thousand separator)
 - Warna status: Active (blue), Won (green), Lost (red), On Hold (gray)
 - Value disimpan sebagai INTEGER cents, ditampilkan sebagai currency
+
+**Wireframes:** [Projects List & Management](../designer-brief/WIREFRAMES_PROJECTS.md)
 
 **Dependencies:** US-2.1 (View companies)
 
@@ -420,6 +442,8 @@ Sehingga saya dapat melacak sales opportunities
 - Currency: Simpan sebagai INTEGER cents (contoh: Rp 50.000.000 = 5.000.000.000 cents)
 - Input uang dengan thousand separator untuk UX
 
+**Wireframes:** [Create Project Form](../designer-brief/WIREFRAMES_PROJECTS.md)
+
 **Dependencies:** US-2.2 (Create company), US-3.2 (Create contact)
 
 ---
@@ -449,6 +473,8 @@ Sehingga data project tetap akurat
 - Server trigger melog perubahan value ke audit table
 - Update timestamp `updated_at`
 
+**Wireframes:** [Edit Project Form](../designer-brief/WIREFRAMES_PROJECTS.md)
+
 **Dependencies:** US-4.2 (Create project)
 
 ---
@@ -470,6 +496,8 @@ Sehingga pipeline saya tetap bersih
 
 **Technical Notes:**
 - Validasi: `NOT IN (SELECT project_id FROM reports WHERE deleted_at IS NULL)`
+
+**Wireframes:** [Project Detail & Delete Confirmation](../designer-brief/WIREFRAMES_PROJECTS.md)
 
 **Dependencies:** US-4.2 (Create project)
 
@@ -534,6 +562,8 @@ Sehingga saya tidak perlu re-select project yang sudah saya lihat
 - **Validation:**
   - Tidak boleh show "Initial Visit" option untuk existing project
   - Validation rule: `if (project_id != null) { exclude_initial_visit = true }`
+
+**Wireframes:** [Project Detail with Create Report Button](../designer-brief/WIREFRAMES_PROJECTS.md)
 
 **Dependencies:**
 - US-4.1 (View project detail)
@@ -652,6 +682,8 @@ Sehingga manager saya dapat melacak aktivitas saya
   - Bottom sheet NOT shown di Create Report screen (already selected from Project Detail)
 - **UX specifications:** Lihat designer-brief/NESTED_INLINE_CREATION_WIREFRAMES.md (22 wireframes - includes Entry Point C)
 
+**Wireframes:** [Create Report Flow with Nested Inline Creation](../designer-brief/NESTED_INLINE_CREATION_WIREFRAMES.md)
+
 **Dependencies:** US-4.2 (Create project), US-3.2 (Create contact), US-4.5 (Create from Project Detail)
 
 ---
@@ -679,6 +711,8 @@ Sehingga saya dapat mereview aktivitas kunjungan
 - Map widget: Google Maps atau OpenStreetMap
 - Manager memiliki akses read-only (tidak ada tombol edit/delete)
 
+**Wireframes:** [Report Detail with Sync States](../designer-brief/WIREFRAMES_REPORTS.md)
+
 **Dependencies:** US-5.1 (Create report)
 
 ---
@@ -704,6 +738,8 @@ Sehingga saya dapat memperbaiki kesalahan
 - Update timestamp `updated_at`
 - Draft auto-save berlaku untuk edits
 
+**Wireframes:** [Edit Report Form](../designer-brief/WIREFRAMES_REPORTS.md)
+
 **Dependencies:** US-5.1 (Create report)
 
 ---
@@ -726,6 +762,8 @@ Sehingga data saya tetap bersih
 **Technical Notes:**
 - Soft delete report dan attachments
 - Cleanup job menghapus orphaned photos (Phase 2)
+
+**Wireframes:** [Delete Report Confirmation](../designer-brief/WIREFRAMES_REPORTS.md)
 
 **Dependencies:** US-5.1 (Create report)
 
@@ -759,6 +797,8 @@ Sehingga saya dapat mereview aktivitas saya
 - Tampilkan count pending syncs di atas
 - Efficient indexed queries
 
+**Wireframes:** [Sales Rep Dashboard & Reports List](../designer-brief/WIREFRAMES_DASHBOARD.md)
+
 **Dependencies:** US-5.1 (Create report)
 
 ---
@@ -785,6 +825,8 @@ Sehingga saya dapat memantau aktivitas tim
 - RLS policy memungkinkan managers membaca semua reports
 - Fetch dari Supabase (managers selalu online)
 - Manager tidak dapat mengedit/menghapus reports (read-only)
+
+**Wireframes:** [Manager Dashboard & Team Reports List](../designer-brief/WIREFRAMES_DASHBOARD.md)
 
 **Dependencies:** US-5.1 (Create report), US-1.1 (Login with role)
 
@@ -818,6 +860,8 @@ Sehingga saya dapat melacak performance
 - Manager selalu fetch fresh (online)
 - Auto-refresh saat pull-down gesture
 
+**Wireframes:** [Dashboard Screens for Sales Rep & Manager](../designer-brief/WIREFRAMES_DASHBOARD.md)
+
 **Dependencies:** US-4.1 (View projects), US-6.1/6.2 (View reports)
 
 ---
@@ -844,6 +888,8 @@ Sehingga saya tetap produktif di lapangan
 - Semua writes ke SQLite terlebih dahulu
 - Background sync queue untuk pending operations
 - Offline indicator di app bar
+
+**Wireframes:** [Offline Mode Banner & States](../designer-brief/WIREFRAMES_STATES.md)
 
 **Dependencies:** Semua create/edit user stories (US-2.2, US-3.2, US-4.2, US-5.1)
 
@@ -875,6 +921,8 @@ Sehingga data saya aman di-backup ke cloud
 - Jika server memiliki `updated_at` yang lebih baru, server menang (overwrite local)
 - Transaction log untuk rollback capability (lihat Technical_Spec.md)
 
+**Wireframes:** [Sync Progress & Status Screens](../designer-brief/WIREFRAMES_SYNC_SETTINGS.md), [Sync States](../designer-brief/WIREFRAMES_STATES.md)
+
 **Dependencies:** US-7.1 (Offline operation), database/Sync_Strategy.md
 
 ---
@@ -900,6 +948,8 @@ Sehingga saya dapat mengontrol kapan mengupload data (contoh: saat di WiFi)
 - Cek connectivity sebelum mencoba
 - Tampilkan loading indicator selama sync
 
+**Wireframes:** [Manual Sync Screen](../designer-brief/WIREFRAMES_SYNC_SETTINGS.md), [Sync States](../designer-brief/WIREFRAMES_STATES.md)
+
 **Dependencies:** US-7.2 (Auto sync logic)
 
 ---
@@ -924,6 +974,8 @@ Sehingga saya dapat mereview data tanpa internet
 - Paginated download untuk large datasets
 - Periodic refresh (contoh: daily)
 - Fitur khusus manager (sales reps tidak memerlukan ini)
+
+**Wireframes:** [Manager Sync & Download Screens](../designer-brief/WIREFRAMES_SYNC_SETTINGS.md)
 
 **Dependencies:** US-6.2 (View team reports)
 
@@ -953,6 +1005,8 @@ Sehingga saya dapat mengonfirmasi akun mana yang saya gunakan
 - Read-only (profile editing di luar lingkup MVP)
 - Cache profile data secara lokal
 
+**Wireframes:** [User Profile Screen](../designer-brief/WIREFRAMES_SYNC_SETTINGS.md)
+
 **Dependencies:** US-1.1 (Login)
 
 ---
@@ -980,6 +1034,8 @@ Sehingga app bekerja sesuai kebutuhan saya
 - Gunakan shared_preferences untuk persistence settings
 - Photo quality mempengaruhi compression ratio (Low=100KB, Medium=500KB, High=1MB)
 - Clear cache menghapus cached photos, bukan database
+
+**Wireframes:** [App Settings Screen](../designer-brief/WIREFRAMES_SYNC_SETTINGS.md)
 
 **Dependencies:** None (fitur independent)
 
