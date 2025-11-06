@@ -337,6 +337,55 @@ During: [⟳ Menyimpan...]  ← Spinner + text, button disabled
 
 ---
 
+## 🔽 Part 2.5: Progressive Disclosure & Nested Forms (BARU - Nov 2025)
+
+### Pattern: Multi-Level Expandable Forms
+
+**Use Case:** Create Report → Create Project → Create Company/Contact (all inline, single screen)
+
+**Visual Hierarchy:**
+- **Level 1 (Report):** White background (#FFFFFF), full width
+- **Level 2 (Inline Project):** Light Gray background (#F5F5F5), 5-10dp left indent, 8dp padding
+- **Level 3 (Nested Company/Contact):** Light Blue background (#E3F2FD), 10-15dp left indent, 8dp padding
+
+**Dropdown Pattern (Standard untuk Semua):**
+- Dropdown menampilkan existing entities (scrollable, max 5 visible = 240dp height)
+- Divider line (2dp, gray #E0E0E0, 8dp margin)
+- "[+ Buat [Entity] Baru]" selalu di bottom (sticky position)
+  - ➕ Icon (20dp, Material Icons: add_circle_outline)
+  - Text: Blue (#2196F3) atau Green (#4CAF50), bold (600 weight)
+  - Touch target: 48dp minimum height
+
+**Expand/Collapse Animations:**
+- Expand: Slide down + fade in (300ms, ease-out curve)
+- Collapse: Fade out + slide up (200ms, ease-in curve)
+- Auto-scroll untuk keep active form visible (smooth scroll, 250ms)
+
+**Validation States:**
+- Invalid field: Red border (#F44336, 2dp), error text di bawah (12sp, red)
+- Valid field: Green border (#4CAF50, 1dp, subtle), checkmark icon
+- Real-time validation (300ms debounce setelah user berhenti typing)
+- Disable "Simpan" button sampai semua required fields valid
+
+**Success Feedback:**
+- Green checkmark icon muncul di sebelah field label (animated, 500ms)
+- Toast message: "✓ [Entity] berhasil dibuat!" (2 detik duration, bottom screen)
+- Saved entity muncul di parent dropdown dengan green border (fades to normal setelah 2s)
+
+**Cancel/Abandon Behavior:**
+- Show confirmation dialog: "Buang perubahan [Entity]?" dengan tombol "Ya, Buang" / "Batalkan"
+- Jika confirmed → Collapse form, reset fields, return ke dropdown
+
+**Mobile Optimization (untuk Budi's Profile):**
+- Large touch targets (48dp minimum)
+- Clear visual depth dengan colors + indentation (tidak hanya shadows)
+- Breadcrumb trail saat deeply nested: "Buat Laporan > Buat Project > Buat Company"
+- Bottom action buttons selalu visible (sticky, di atas keyboard)
+
+**Complete Specifications:** Lihat `NESTED_INLINE_CREATION_WIREFRAMES.md`
+
+---
+
 ## ♿ Part 3: Accessibility Requirements
 
 ### Color Contrast (WCAG AA Minimum)

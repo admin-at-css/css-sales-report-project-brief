@@ -656,6 +656,82 @@ Berdasarkan PRD.md risk table, risks ini dapat diterima untuk MVP:
 
 ---
 
+## 11.5. Edge Cases: Nested Inline Creation (BARU - Nov 2025)
+
+### Edge Case 11.5.1: Nested Creation - Orphaned Entities
+
+**Scenario:** User membuat company + contact + project inline, tetapi report save gagal
+
+**Problem:** Orphaned entities di database (company/contact/project tanpa report)
+
+**Solution:**
+- Wrap entire flow dalam transaction logic
+- Mark semua entities sebagai draft (is_draft = true)
+- Link: `report.id → project.id → company.id + contact.id`
+- Jika report save gagal → Rollback TIDAK diperlukan (drafts tersimpan untuk recovery)
+- User dapat resume draft nanti
+- **Cleanup:** Periodic job menghapus drafts lebih dari 30 hari tanpa activity
+
+**Testing:**
+- Simulasikan network error saat save report (setelah entities created)
+- Verify: Entities tetap ada sebagai drafts, dapat di-resume
+- Verify: Cleanup job berfungsi setelah 30 hari
+
+---
+
+### Edge Case 11.5.2: Duplicate Company Name
+
+**Scenario:** User membuat company "PT Indofood", tetapi sudah ada di database
+
+**Problem:** Database akan reject saat sync (unique constraint violation)
+
+**Solution:**
+- Check duplicates SEBELUM save (case-insensitive, trimmed)
+- Show error: "Company 'PT ABC' sudah ada. Pilih dari dropdown atau gunakan nama berbeda."
+- Tawarkan autocomplete: Show similar companies saat user typing
+
+**Testing:**
+- Create company dengan nama yang sudah ada
+- Verify: Error muncul before save
+- Verify: User dapat pilih existing company dari suggestion
+
+---
+
+### Edge Case 11.5.3: Company Change After Contact Created
+
+**Scenario:** User membuat contact untuk Company A, lalu switch ke Company B
+
+**Problem:** Contact milik Company A, invalid untuk Company B
+
+**Solution:**
+- Clear contact field immediately (reset ke empty)
+- Show warning: "Contact '[Name]' tidak tersedia untuk company baru. Pilih contact lain."
+- Jika contact dibuat inline → Tawarkan reassign: "Pindahkan contact ke company baru?"
+
+**Testing:**
+- Create contact untuk Company A
+- Change company dropdown ke Company B
+- Verify: Contact field cleared, warning shown
+
+---
+
+### Edge Case 11.5.4: User Abandons Inline Creation
+
+**Scenario:** User fills company name halfway, then taps "Batalkan"
+
+**Solution:**
+- Show confirmation: "Buang perubahan [Entity]?"
+- If "Ya, Buang" → Collapse form, reset fields, return to dropdown
+- If "Batalkan" → Stay in form, keep filled data
+
+**Testing:**
+- Fill nested form partially
+- Tap cancel
+- Verify: Confirmation dialog appears
+- Verify: Both paths work correctly
+
+---
+
 ## 12. Referensi
 
 **Sumber Edge Cases:**

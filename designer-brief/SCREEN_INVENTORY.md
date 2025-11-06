@@ -273,82 +273,91 @@ Ini adalah 5 screens yang HARUS di-design di Week 1 untuk review:
 
 ### EPIC 5: Create & View Reports (6 Screens)
 
-#### 18. Create Report - Step 1: Select Project
-- **User Story:** US-5.1
+#### 18. Create Report Screen (v2.0 - Report Type First + Branching Logic)
+- **User Story:** US-5.1 (Enhanced dengan +18 SP untuk nested inline creation)
 - **User:** Sales rep only
+- **Purpose:** Progressive disclosure report creation - Report Type determines complexity
 - **Key Elements:**
-  - Top App Bar: "Buat Laporan" + back + cancel
-  - Progress indicator: "1 dari 4" atau stepper (Step 1/4)
-  - Search bar: "Cari proyek..."
-  - List of projects (grouped by company):
-    - Company name (section header)
-    - Project name + status badge
-  - Tap project → proceed to Step 2
-- **States:**
-  - Empty (belum ada projects - show CTA untuk create project dulu)
-  - Loaded
+  - Top App Bar: "Buat Laporan Kunjungan" + back
 
-#### 19. Create Report - Step 2: Report Form
-- **User Story:** US-5.1
-- **User:** Sales rep only
-- **Key Elements:**
-  - Top App Bar: "Buat Laporan" + back + save draft
-  - Progress: "2 dari 4"
-  - Selected project info (card at top, tidak editable, ada "Ganti Proyek" link)
-  - Form fields:
-    - Tipe Laporan* (dropdown: Meeting, Site Visit, Quotation, Follow-up, Other)
-    - Tanggal Kunjungan* (date picker, default: today)
-    - Peserta* (multi-select dari contacts perusahaan ini + primary contact auto-selected)
-    - Catatan (multiline text area, optional)
-    - Tindakan Selanjutnya (text input, optional)
-    - Hasil/Outcome (text input, optional)
-  - GPS auto-capture indicator: "Lokasi: [Latitude, Longitude] ✓" atau "Lokasi tidak tersedia"
-  - Bottom actions: Kembali | Lanjut
-  - Draft auto-save: "Terakhir disimpan 30 detik yang lalu"
+  - **Section 1: Report Type (ALWAYS FIRST):**
+    - Dropdown: Initial Visit | Follow-up Meeting | Technical Presentation | Price Quotation | Closing Visit | After Sales Visit
+    - Icon 🆕 untuk "Initial Visit" (flow berbeda)
+    - Divider setelah Initial Visit
+    - Unlocks sections berikutnya setelah selected
+    - Progress indicator: "1 of 5 • Report Type" atau "1 of 3 • Report Type"
 
-#### 20. Create Report - Step 3: Add Photos
-- **User Story:** US-5.1
-- **User:** Sales rep only
-- **Key Elements:**
-  - Top App Bar: "Tambah Foto" + back + save draft
-  - Progress: "3 dari 4"
-  - Photo grid (max 10 photos):
-    - Thumbnail view (100x100dp)
-    - Each photo has X button (remove photo)
-  - Upload buttons:
-    - "Ambil Foto" (camera icon)
-    - "Pilih dari Galeri" (gallery icon)
-  - Photo counter: "3 dari 10 foto"
-  - Bottom actions: Lewati (skip) | Lanjut
-- **States:**
-  - No photos (show empty state + CTA)
-  - 1-10 photos uploaded
-  - Max photos (10) → disable upload buttons
-- **Notes:**
-  - Photos di-compress otomatis di background (tidak perlu UI, tapi show success indicator)
+  - **BRANCHING LOGIC:**
 
-#### 21. Create Report - Step 4: Review & Submit
-- **User Story:** US-5.1
-- **User:** Sales rep only
-- **Key Elements:**
-  - Top App Bar: "Review Laporan" + back
-  - Progress: "4 dari 4"
-  - Review sections (collapsed accordion):
-    - Proyek (expand to see: company, project name, primary contact)
-    - Detail Laporan (expand: tipe, tanggal, peserta, catatan, next action, outcome)
-    - Foto (expand: photo grid)
-    - Lokasi (expand: GPS coordinates + map preview if available)
-  - Edit buttons per section (navigate back to that step)
-  - Bottom actions:
-    - "Simpan sebagai Draft" (secondary)
-    - "Submit Laporan" (primary)
-- **States:**
-  - Review mode (semua collapsed)
-  - Expanded sections
-  - Submitting (button spinner + disable form)
-  - Success (show confirmation + redirect)
+    **A. Initial Visit → FULL FLOW (5 sections):**
+    - **Section 2: Project**
+      - "➕ Create New Project" di TOP dropdown (FIXED, green text, always visible)
+      - Solid divider memisahkan Create New dari existing items
+      - Scrollable list existing projects (tap or type to filter)
+      - Inline project creation dengan nested company/contact
+    - **Section 3: Company**
+      - Auto-filled dari project atau create new inline
+    - **Section 4: Contact**
+      - Auto-filled dari project atau create new inline
+    - **Section 5: Report Details**
+      - Visit Date, Attendees, Notes, Next Action, Outcome, Photos, GPS
 
-#### 22. Report Detail View
+    **B. Tipe Lain → QUICK FLOW (3 sections):**
+    - **Section 2: Project**
+      - Existing projects ONLY (no Create New option)
+      - Company/Contact auto-filled, read-only
+    - **Section 3: Report Details**
+      - Visit Date, Attendees, Notes, Next Action, Outcome, Photos, GPS
+
+  - **Progressive Disclosure Pattern:**
+    - Sections unlock satu-per-satu setelah completion
+    - Auto-scroll (300ms animation) ke section berikutnya
+    - Completed sections collapse dengan ✓ checkmark + edit icon ✏️
+    - Tap edit icon → Reopen section untuk modify
+    - Helper text untuk locked sections: "Pilih report type dulu"
+
+  - **Inline Creation Pattern (Initial Visit only):**
+    - Light blue background (#E3F2FD), 10dp left indent
+    - "Cancel" (secondary) | "Continue ➜" (primary) buttons
+    - Real-time validation, disable Continue sampai valid
+    - Nested company/contact creation DALAM project form
+
+  - Bottom: "SUBMIT REPORT" button (disabled sampai semua complete)
+
+- **States (17 wireframes total - see NESTED_INLINE_CREATION_WIREFRAMES.md):**
+  1. Initial load (Report Type active, lainnya locked)
+  2. Report Type dropdown expanded
+  3. After Initial Visit selected (Project unlocks)
+  4. Project combo expanded (Create New at top)
+  5. Project combo filtered (typing "Factory")
+  6. Inline project form expanded
+  7. Company section unlocked
+  8. Company combo expanded
+  9. Inline company form
+  10. Contact section unlocked
+  11. Contact combo (filtered by company)
+  12. Inline contact form
+  13. Report Details unlocked (all collapsed)
+  14. Report Details scrolled (notes, photos)
+  15. Report Details with photos & GPS
+  16. Follow-up flow (3 sections only)
+  17. Follow-up after project selected
+
+- **Interactions:**
+  - Tap Report Type → Dropdown expands, show 6 options
+  - Select "Initial Visit" → Project section unlocks + auto-scroll
+  - Select tipe lain → Project section unlocks (existing only) + auto-scroll
+  - Tap "➕ Create New" (TOP of dropdown) → Inline form expands
+  - Type in search box → Filters results, Create New tetap at TOP
+  - Complete section → Auto-collapse + checkmark + auto-scroll next
+  - Tap ✏️ edit icon → Reopen collapsed section
+  - Draft auto-save setiap 30s (all sections)
+
+- **Wireframes:** NESTED_INLINE_CREATION_WIREFRAMES.md (17 complete states)
+- **Design System:** Colors, measurements, animations documented in wireframes
+- **Priority:** P0 (Critical - optimizes for 80% use case: repeat customers)
+
+#### 19. Report Detail View
 - **User Story:** US-5.2
 - **User:** Sales rep (own reports), Manager (all reports)
 - **Key Elements:**

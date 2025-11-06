@@ -7,9 +7,9 @@
 **Project:** CSS Sales Report Application
 **Phase:** MVP (Minimum Viable Product)
 **Versi:** 1.1 (Revised - Edit Included)
-**Terakhir Diperbarui:** 2025-10-28
-**Target Durasi:** 10-12 Minggu
-**Total Story Points:** 77 (73% dari full scope)
+**Terakhir Diperbarui:** November 2025
+**Target Durasi:** 11.5-13 Minggu (+1.5 minggu untuk nested inline creation)
+**Total Story Points:** 95 (+18 untuk nested inline creation enhancement)
 
 ---
 
@@ -30,6 +30,7 @@ Memberikan working offline-first mobile app yang memungkinkan **2 sales reps** m
 **✅ IN MVP:**
 - Full offline-first capability
 - Create companies, contacts, projects, reports
+- **Nested inline creation** - Create project/company/contact inline saat buat report (matches real workflow)
 - **Edit companies, contacts, projects** (kualitas data sangat penting)
 - View semua created entities
 - Manager dashboard dengan team reports
@@ -416,16 +417,45 @@ Future<void> updateProjectValue(String projectId, int newValueCents) async {
 ### EPIC 5: Create Report (16 Story Points)
 
 #### ✅ US-5.1: Create Visit Report
-**Story Points:** 13
+**Story Points:** 31 (+18 untuk nested inline creation)
 **Priority:** P0 (Critical - CORE VALUE PROPOSITION)
 
 **Included:**
-- Form fields: Project (dropdown), Report Type (dropdown), Visit Date, Attendees (multi-select), Notes, Next Action, Outcome, Photos (max 10), GPS (auto-capture, optional)
-- **Draft auto-save setiap 30 detik** (P0 requirement)
+- **Progressive Disclosure UI Pattern:**
+  - **Report Type FIRST** (determines branching logic)
+  - Initial Visit → Full flow 5 sections (can create new project/company/contact)
+  - Tipe lain → Quick flow 3 sections (existing project only)
+  - Sections unlock progressively setelah completion
+  - Auto-scroll (300ms) ke section berikutnya
+  - Completed sections collapse dengan ✓ + edit icon ✏️
+
+- **Branching Logic:**
+  - Report Type menentukan complexity
+  - Initial Visit = new customer path (20% of use cases)
+  - Follow-up/lainnya = repeat customer path (80% of use cases - OPTIMIZED)
+
+- **Nested Inline Creation (Initial Visit only):**
+  - "➕ Create New [Entity]" at TOP of dropdowns (FIXED, green text, always visible)
+  - Scrollable combo boxes (typing optional untuk filter)
+  - Inline project creation dengan nested company/contact forms
+  - Light blue bg (#E3F2FD), 10dp indent untuk visual depth
+  - Real-time validation per nested form
+
+- Form fields: Report Type (dropdown - FIRST), Project (dropdown), Visit Date, Attendees (multi-select), Notes, Next Action, Outcome, Photos (max 10), GPS (auto-capture, optional)
+- **Draft auto-save setiap 30 detik** (P0 requirement - includes nested entities)
 - Photo compression (<500KB per photo)
 - **Per-photo sync status tracking** (P0 requirement - already in schema)
 - GPS auto-capture dengan 10s timeout (non-blocking jika denied)
 - Save offline, sync online
+
+**Why +18 SP:**
+- Multi-level progressive disclosure (5 collapsible sections dengan state management)
+- Report Type branching logic (2 different flows based on selection)
+- Nested inline creation (3 levels: Report → Project → Company/Contact)
+- "Create New at TOP" combo box pattern (custom widget, pinned positioning)
+- Auto-scroll coordination dengan section completion
+- Real-time validation across nested forms
+- Draft handling untuk abandoned nested entities
 
 **Draft Auto-Save Implementation:**
 ```dart
@@ -761,16 +791,23 @@ Future<void> onAppStartup() async {
 | EPIC 2: Companies | 3/4 | 1 | 10 | 2 |
 | EPIC 3: Contacts | 3/4 | 1 | 10 | 2 |
 | EPIC 4: Projects | 3/4 | 1 | 11 | 1 |
-| EPIC 5: Reports | 2/4 | 2 | 16 | 4 |
+| EPIC 5: Reports | 2/4 | 2 | **34** (+18 nested inline) | 4 |
 | EPIC 6: Dashboard | 2/3 | 1 | 10 | 5 |
 | EPIC 7: Offline/Sync | 3/4 | 1 | 15 | 2 |
 | EPIC 8: Profile | 0/2 | 2 | 0 | 5 |
-| **TOTAL** | **18/27** | **9** | **77** | **21** |
+| **TOTAL** | **18/27** | **9** | **95** (+18) | **21** |
 
-**MVP = 77 story points (79% dari 98 story points across 8 epics)**
+**MVP = 95 story points (+18 untuk nested inline creation)**
 **Deferred = 21 story points (21%)**
 
-Note: Total adalah 98 instead of 106 karena 8 points sudah dialokasikan ke Epic 8 (deferred).
+Note: +18 story points ditambahkan ke US-5.1 untuk **Progressive Disclosure + Nested Inline Creation**:
+- **Report Type First:** Determines flow complexity (Initial Visit = 5 sections vs Follow-up = 3 sections)
+- **Branching Logic:** Optimizes untuk 80% use case (repeat customers: 2-3 menit vs new customers: 5-10 menit)
+- **Nested Inline Creation:** Kemampuan create project/company/contact inline saat buat report (Initial Visit only)
+- **Create New at TOP:** Pattern baru dimana "Create New" di TOP dropdown (FIXED, always visible), bukan di bottom
+- **Progressive Disclosure:** Sections unlock dan auto-scroll setelah completion, dengan edit capability
+
+Ini critical untuk match real-world workflow: sales reps naturally berpikir "Apa tipe kunjungan ini?" SEBELUM pilih project. Initial Visit = new opportunity (perlu create entities), Follow-up = existing project (quick entry).
 
 ### What Makes This MVP?
 
@@ -789,6 +826,20 @@ Note: Total adalah 98 instead of 106 karena 8 points sudah dialokasikan ke Epic 
 - **Pagination mandatory:** Performance requirement (list views freeze dengan 100+ items)
 - **Security non-negotiable:** RLS policies tested thoroughly
 - **Data integrity non-negotiable:** Currency as INTEGER, transaction log, per-photo status
+
+### Technical Challenges (Added Nov 2025)
+
+**Nested Inline Creation Complexity (+18 SP):**
+- **Challenge:** Multi-level form state management (3 levels: Report → Project → Company/Contact)
+- **Complexity:** Real-time validation across nested entities, rollback logic jika save gagal
+- **Risk:** Higher bug potential dengan complex state, orphaned draft entities jika user abandons
+- **Mitigation:**
+  - Comprehensive unit tests untuk nested creation flows
+  - Progressive disclosure untuk reduce UI clutter
+  - Draft entities linked ke draft report untuk cleanup
+  - Clear visual hierarchy (colors + indentation) untuk Budi's profile
+- **Timeline Impact:** +1.5 minggu (Week 7-10 untuk Sprint 4)
+- **Value:** Sepenuhnya menyelesaikan real-world workflow friction - sales reps tidak pernah leave report screen
 
 ---
 
@@ -840,13 +891,27 @@ Note: Total adalah 98 instead of 106 karena 8 points sudah dialokasikan ke Epic 
 
 ---
 
-### Sprint 4: Reports - Core Feature (Week 7-8)
-**Goal:** Create visit reports dengan draft auto-save
+### Sprint 4: Reports - Core Feature dengan Progressive Disclosure + Nested Inline Creation (Week 7-10)
+**Goal:** Create visit reports dengan Report Type branching logic, nested inline creation, dan draft auto-save
 
 **Tasks:**
-1. US-5.1: Create Report (form, validation)
-2. Draft auto-save implementation (setiap 30s)
-3. Photo picker integration
+1. US-5.1 Part 1: Basic Create Report form (form, validation) - 13 SP
+2. US-5.1 Part 2: Progressive Disclosure + Nested Inline Creation - 18 SP
+   - **Report Type First:** Dropdown dengan branching logic (Initial Visit vs Follow-up)
+   - **Progressive Disclosure:** 5 collapsible sections dengan ExpansionTile
+   - **Auto-scroll:** ScrollController animation (300ms) ke section berikutnya
+   - **Section State Management:** Unlock/lock, collapse/expand, edit capability
+   - **Branching Logic:** Different flows untuk Initial Visit (5 sections) vs Follow-up (3 sections)
+   - **Inline Project Creation:** Expandable form dengan light blue bg, 10dp indent
+   - **"Create New at TOP" Pattern:** FIXED position di TOP dropdown (BUKAN bottom), green text, always visible
+   - **Nested Company/Contact Creation:** Di dalam project form (3 levels deep)
+   - **Scrollable Combo Boxes:** Typing optional untuk filter
+   - **Multi-level State Management:** Report → Project → Company/Contact
+   - **Real-time Validation:** Per nested form dengan disable Continue sampai valid
+   - **Success Feedback:** Green checkmark ✓, collapsed header dengan edit icon ✏️
+   - **Progress Indicator:** "X of Y • Section Name" per section
+3. Draft auto-save implementation (setiap 30s, includes draft nested entities dan Report Type)
+4. Photo picker integration
 4. Photo compression (<500KB)
 5. GPS auto-capture (dengan timeout, optional)
 6. US-5.2: View Report Detail
