@@ -137,14 +137,36 @@ Material Design 3 elevation levels:
 
 **Create clickable Figma prototype untuk 5 user flows ini:**
 
-#### **Flow 1: Create Report (Offline)**
+#### **Flow 1: Create Report - Initial Visit (Offline)**
 ```
-Home → Companies List → Select Company →
-Projects List → Select Project →
-Create Report Form → Add Photos →
-Review → Submit → Success (with "Syncing..." indicator)
+Home → Tap "Buat Laporan" →
+Report Type dropdown → Pilih "Initial Visit" →
+Project section unlocks + auto-scroll →
+Tap "➕ Create New Project" (di TOP dropdown) →
+Inline project form expands →
+Fill project fields → Tap Continue →
+Company section unlocks + auto-scroll →
+Create company inline (if needed) →
+Contact section unlocks + auto-scroll →
+Create contact inline (if needed) →
+Report Details section unlocks →
+Fill visit date, attendees, notes →
+Add photos → Submit →
+Success (with "Syncing..." indicator)
 ```
-**Why:** This is the CORE feature (most complex flow)
+**Why:** Ini adalah CORE feature (most complex flow - progressive disclosure dengan nested inline creation)
+
+**Alternatif - Flow 1B: Create Report - Follow-up (Quick Flow)**
+```
+Home → Tap "Buat Laporan" →
+Report Type dropdown → Pilih "Follow-up Meeting" →
+Project section unlocks (existing projects only) →
+Select existing project → Company/Contact auto-filled (read-only) →
+Report Details section unlocks →
+Fill visit date, attendees, notes → Add photos → Submit →
+Success
+```
+**Why:** Tests quick flow untuk repeat customers (80% use case - 2-3 menit)
 
 #### **Flow 2: Create Company**
 ```
@@ -249,11 +271,24 @@ Create a Figma page "Icons Used" dengan list:
 ### Phase 1: First 5 Screens Review
 
 **You Design:**
-1. Create Report Form (complete flow, 3-4 screens)
+1. Create Report Form - Progressive Disclosure Flow (4-5 screens/states):
+   - Initial state (Report Type active, sections locked)
+   - After Initial Visit selected (Project section unlocked)
+   - Inline project creation form expanded
+   - Report Details section (final form)
+   - Success state
 2. Companies List + Create/Edit (3 screens)
 3. Contacts List (1 screen)
 
-**Total: ~7-8 screens** (we said 5 flows, but creates 7-8 actual screens)
+**Total: ~8-9 screens** (termasuk states untuk progressive disclosure flow)
+
+**Catatan Penting untuk Create Report:**
+- Design harus show progressive disclosure (sections unlock satu-per-satu)
+- "➕ Create New" di TOP dropdown (FIXED position, green text, always visible)
+- Inline forms punya light blue background (#E3F2FD), 10dp indent
+- Completed sections collapse dengan ✓ checkmark + edit icon ✏️
+- Progress indicator: "X of Y • Section Name"
+- Lihat NESTED_INLINE_CREATION_WIREFRAMES.md untuk detailed specifications
 
 **Submit:**
 - Figma file link (set to "Anyone with link can comment")
@@ -409,6 +444,8 @@ Create a Figma page "Icons Used" dengan list:
 ### Required:
 - **Figma** (desktop app or web)
 - **CSS Logo Guidelines.pdf** (in this folder)
+- **NESTED_INLINE_CREATION_WIREFRAMES.md** (complete specifications untuk Create Report flow)
+- **SCREEN_INVENTORY.md** (list semua 31 screens dengan details)
 - **Material Design 3 Figma Kit** (optional but helpful)
   - Download: https://www.figma.com/community/file/1035203688168086460
 
